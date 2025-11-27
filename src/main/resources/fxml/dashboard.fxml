@@ -76,13 +76,4 @@
         <Label fx:id="monthlyAverageLabel" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
         <Label text="Weekly expenses × 4 weeks" style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;"/>
     </VBox>
-
-    <!-- Copyright Notice -->
-    <Label text="© Copyright 2025 JCBudgetBuddy | Jericho Crosby (Chalwk)"
-           GridPane.columnIndex="0"
-           GridPane.columnSpan="4"
-           GridPane.rowIndex="1"
-           style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;"
-           GridPane.halignment="CENTER"
-           GridPane.valignment="BOTTOM"/>
 </GridPane>
