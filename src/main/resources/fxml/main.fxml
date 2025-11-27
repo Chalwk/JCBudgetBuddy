@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1"
+      fx:controller="com.chalwk.controller.MainController" spacing="20"
+      style="-fx-background-color: #f5f7fa;">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <HBox spacing="20" alignment="CENTER_LEFT">
+        <VBox>
+            <Label text="JCBudgetBuddy" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            <Label text="Track your weekly and monthly expenses with automatic calculations"
+                   style="-fx-text-fill: #95a5a6; -fx-font-size: 14px;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="exportBtn" text="Export Data" style="-fx-background-color: #2ecc71; -fx-text-fill: white;"/>
+        <Button fx:id="importBtn" text="Import Data" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+    </HBox>
+
+    <fx:include fx:id="dashboard" source="dashboard.fxml"/>
+
+    <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: transparent;">
+        <tabs>
+            <Tab text="Weekly Bills">
+                <fx:include fx:id="weeklyBills" source="weeklybills.fxml"/>
+            </Tab>
+            <Tab text="Monthly Bills">
+                <fx:include fx:id="monthlyBills" source="monthlybills.fxml"/>
+            </Tab>
+            <Tab text="Invoices">
+                <fx:include fx:id="invoices" source="invoices.fxml"/>
+            </Tab>
+        </tabs>
+    </TabPane>
+</VBox>

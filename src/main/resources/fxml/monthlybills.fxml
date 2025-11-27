@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1"
+      fx:controller="com.chalwk.controller.MonthlyBillsController" spacing="15">
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Monthly Bills" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="addBillBtn" text="Add Bill" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+    </HBox>
+
+    <TableView fx:id="billsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn text="Bill" prefWidth="200"/>
+            <TableColumn text="Amount" prefWidth="100"/>
+            <TableColumn text="Frequency" prefWidth="100"/>
+            <TableColumn text="Payment Day" prefWidth="150"/>
+            <TableColumn text="Additional Notes" prefWidth="250"/>
+            <TableColumn text="Payment Method" prefWidth="150"/>
+            <TableColumn text="Actions" prefWidth="150"/>
+        </columns>
+    </TableView>
+</VBox>

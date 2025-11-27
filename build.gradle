@@ -1,0 +1,75 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'org.beryx.jlink' version '2.26.0'
+}
+
+application {
+    mainClass = 'com.chalwk.Main'
+    mainModule = 'com.chalwk'
+}
+
+group = 'com.chalwk'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+javafx {
+    version = '21'
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
+}
+
+jlink {
+    launcher {
+        name = 'JCBudgetBuddy'
+    }
+
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+
+    jpackage {
+        installerType = 'exe'
+        installerOptions = [
+                '--description', 'Personal Finance Tracker',
+                '--vendor', 'Jericho Crosby',
+                '--win-menu',
+                '--win-shortcut',
+                '--win-dir-chooser',
+                '--verbose',
+                '--about-url', 'https://chalwk.github.io',
+                '--copyright', '© Copyright 2025 JCBudgetBuddy | Jericho Crosby (Chalwk)',
+                '--license-file', 'src/main/resources/LICENSE.txt',
+        ]
+
+        imageOptions = [
+                '--icon', 'src/main/resources/icon.ico'
+        ]
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/resources']
+            includes = ['**/*']
+        }
+    }
+}

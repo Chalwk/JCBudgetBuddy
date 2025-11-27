@@ -1,0 +1,242 @@
+package com.chalwk.controller;
+
+import com.chalwk.model.Bill;
+import com.chalwk.model.UserData;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MonthlyBillsController implements Initializable {
+
+    @FXML
+    private TableView<Bill> billsTable;
+    @FXML
+    private Button addBillBtn;
+
+    private UserData userData;
+    private MainController mainController;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setupTable();
+        setupEventHandlers();
+    }
+
+    public void setUserData(UserData userData) {
+        this.userData = userData;
+        refreshTable();
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setupTable() {
+        billsTable.getColumns().clear();
+
+        TableColumn<Bill, String> nameCol = new TableColumn<>("Bill");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nameCol.setPrefWidth(200);
+
+        TableColumn<Bill, Double> amountCol = new TableColumn<>("Amount");
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        amountCol.setPrefWidth(100);
+        amountCol.setCellFactory(col -> new TableCell<Bill, Double>() {
+            @Override
+            protected void updateItem(Double amount, boolean empty) {
+                super.updateItem(amount, empty);
+                if (empty || amount == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("$%.2f", amount));
+                }
+            }
+        });
+
+        TableColumn<Bill, String> frequencyCol = new TableColumn<>("Frequency");
+        frequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
+        frequencyCol.setPrefWidth(100);
+
+        TableColumn<Bill, String> dayCol = new TableColumn<>("Payment Day");
+        dayCol.setCellValueFactory(new PropertyValueFactory<>("day"));
+        dayCol.setPrefWidth(150);
+
+        TableColumn<Bill, String> notesCol = new TableColumn<>("Additional Notes");
+        notesCol.setCellValueFactory(new PropertyValueFactory<>("notes"));
+        notesCol.setPrefWidth(250);
+
+        TableColumn<Bill, String> paymentMethodCol = new TableColumn<>("Payment Method");
+        paymentMethodCol.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
+        paymentMethodCol.setPrefWidth(150);
+
+        TableColumn<Bill, Void> actionsCol = new TableColumn<>("Actions");
+        actionsCol.setPrefWidth(150);
+        actionsCol.setCellFactory(col -> new TableCell<Bill, Void>() {
+            private final Button editBtn = new Button("Edit");
+            private final Button deleteBtn = new Button("Delete");
+
+            {
+                editBtn.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white;");
+                deleteBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
+
+                editBtn.setOnAction(e -> {
+                    Bill bill = getTableView().getItems().get(getIndex());
+                    editBill(bill);
+                });
+
+                deleteBtn.setOnAction(e -> {
+                    Bill bill = getTableView().getItems().get(getIndex());
+                    deleteBill(bill);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    HBox buttons = new HBox(5, editBtn, deleteBtn);
+                    setGraphic(buttons);
+                }
+            }
+        });
+
+        billsTable.getColumns().addAll(nameCol, amountCol, frequencyCol, dayCol, notesCol, paymentMethodCol, actionsCol);
+    }
+
+    private void setupEventHandlers() {
+        addBillBtn.setOnAction(e -> showBillDialog(null));
+    }
+
+    private void refreshTable() {
+        if (userData != null) {
+            billsTable.getItems().setAll(userData.getMonthlyBills());
+        }
+    }
+
+    private void showBillDialog(Bill bill) {
+        Dialog<Bill> dialog = new Dialog<>();
+        dialog.setTitle(bill == null ? "Add Monthly Bill" : "Edit Monthly Bill");
+
+        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new javafx.geometry.Insets(20, 10, 10, 10));
+
+        TextField nameField = new TextField();
+        TextField amountField = new TextField();
+        ComboBox<String> frequencyCombo = new ComboBox<>();
+        TextField dayField = new TextField();
+        TextField notesField = new TextField();
+        ComboBox<String> paymentMethodCombo = new ComboBox<>();
+
+        frequencyCombo.getItems().addAll("Weekly", "Monthly");
+        frequencyCombo.setValue("Monthly");
+
+        paymentMethodCombo.getItems().addAll("manual", "automatic");
+        paymentMethodCombo.setValue("manual");
+
+        if (bill != null) {
+            nameField.setText(bill.getName());
+            amountField.setText(String.valueOf(bill.getAmount()));
+            frequencyCombo.setValue(bill.getFrequency());
+            dayField.setText(bill.getDay());
+            notesField.setText(bill.getNotes());
+            paymentMethodCombo.setValue(bill.getPaymentMethod());
+        }
+
+        grid.add(new Label("Bill Name:"), 0, 0);
+        grid.add(nameField, 1, 0);
+        grid.add(new Label("Amount:"), 0, 1);
+        grid.add(amountField, 1, 1);
+        grid.add(new Label("Frequency:"), 0, 2);
+        grid.add(frequencyCombo, 1, 2);
+        grid.add(new Label("Payment Day:"), 0, 3);
+        grid.add(dayField, 1, 3);
+        grid.add(new Label("Notes:"), 0, 4);
+        grid.add(notesField, 1, 4);
+        grid.add(new Label("Payment Method:"), 0, 5);
+        grid.add(paymentMethodCombo, 1, 5);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButtonType) {
+                try {
+                    Bill result = new Bill(
+                            bill != null ? bill.getId() : generateNewId(),
+                            nameField.getText(),
+                            Double.parseDouble(amountField.getText()),
+                            frequencyCombo.getValue(),
+                            dayField.getText(),
+                            notesField.getText(),
+                            paymentMethodCombo.getValue()
+                    );
+                    return result;
+                } catch (NumberFormatException e) {
+                    showAlert("Invalid amount format");
+                    return null;
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(result -> {
+            if (bill == null) {
+                userData.getMonthlyBills().add(result);
+            } else {
+                int index = userData.getMonthlyBills().indexOf(bill);
+                if (index != -1) {
+                    userData.getMonthlyBills().set(index, result);
+                }
+            }
+            refreshTable();
+            mainController.saveUserData();
+        });
+    }
+
+    private void editBill(Bill bill) {
+        showBillDialog(bill);
+    }
+
+    private void deleteBill(Bill bill) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete");
+        alert.setHeaderText("Delete Bill");
+        alert.setContentText("Are you sure you want to delete this bill: " + bill.getName() + "?");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                userData.getMonthlyBills().remove(bill);
+                refreshTable();
+                mainController.saveUserData();
+            }
+        });
+    }
+
+    private int generateNewId() {
+        return userData.getMonthlyBills().stream()
+                .mapToInt(Bill::getId)
+                .max()
+                .orElse(0) + 1;
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+}
