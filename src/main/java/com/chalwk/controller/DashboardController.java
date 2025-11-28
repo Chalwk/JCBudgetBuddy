@@ -45,13 +45,38 @@ public class DashboardController implements Initializable {
         if (userData == null) return;
 
         double weeklyIncome = userData.getWeeklyIncome();
+
+        // Calculate weekly expenses from weekly bills (adjusting for frequency)
         double weeklyExpensesFromWeeklyBills = userData.getWeeklyBills().stream()
-                .mapToDouble(Bill::getAmount)
+                .mapToDouble(bill -> {
+                    switch (bill.getFrequency()) {
+                        case "Weekly":
+                            return bill.getAmount();
+                        case "Bi-Weekly":
+                            return bill.getAmount() / 2; // Half the amount per week
+                        case "Monthly":
+                            return bill.getAmount() / 4; // Quarter the amount per week
+                        default:
+                            return bill.getAmount(); // Default to weekly
+                    }
+                })
                 .sum();
 
+        // Calculate weekly expenses from monthly bills (only automatic payments)
         double weeklyExpensesFromMonthlyBills = userData.getMonthlyBills().stream()
                 .filter(bill -> "automatic".equals(bill.getPaymentMethod()))
-                .mapToDouble(bill -> bill.getAmount() / 4)
+                .mapToDouble(bill -> {
+                    switch (bill.getFrequency()) {
+                        case "Weekly":
+                            return bill.getAmount();
+                        case "Bi-Weekly":
+                            return bill.getAmount() / 2; // Half the amount per week
+                        case "Monthly":
+                            return bill.getAmount() / 4; // Quarter the amount per week
+                        default:
+                            return bill.getAmount() / 4; // Default to monthly
+                    }
+                })
                 .sum();
 
         double totalWeeklyExpenses = weeklyExpensesFromWeeklyBills + weeklyExpensesFromMonthlyBills;

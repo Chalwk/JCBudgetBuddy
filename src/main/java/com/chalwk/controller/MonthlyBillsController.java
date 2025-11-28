@@ -209,7 +209,8 @@ public class MonthlyBillsController implements Initializable {
         TextField notesField = new TextField();
         ComboBox<String> paymentMethodCombo = new ComboBox<>();
 
-        frequencyCombo.getItems().addAll("Weekly", "Monthly");
+        // Update frequency options to include Bi-Weekly
+        frequencyCombo.getItems().addAll("Weekly", "Bi-Weekly", "Monthly");
         frequencyCombo.setValue("Monthly");
 
         paymentMethodCombo.getItems().addAll("manual", "automatic");

@@ -205,7 +205,8 @@ public class WeeklyBillsController implements Initializable {
         TextField dayField = new TextField();
         TextField notesField = new TextField();
 
-        frequencyCombo.getItems().addAll("Weekly", "Monthly");
+        // Update frequency options to include Bi-Weekly
+        frequencyCombo.getItems().addAll("Weekly", "Bi-Weekly", "Monthly");
         frequencyCombo.setValue("Weekly");
 
         if (bill != null) {
