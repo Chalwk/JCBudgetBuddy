@@ -15,12 +15,12 @@ A personal finance tracker built with JavaFX for managing weekly and monthly exp
 
 <table>
   <tr>
-    <td><img src="https://i.imgur.com/ZRlDfzS.png" width="400" alt=""/></td>
-    <td><img src="https://i.imgur.com/O0pqVh9.png" width="400" alt=""/></td>
+    <td><img src="images/screenshot1.png" width="300"/></td>
+    <td><img src="images/screenshot2.png" width="300"/></td>
   </tr>
   <tr>
-    <td><img src="https://i.imgur.com/YZcEA2l.png" width="400" alt=""/></td>
-    <td><img src="https://i.imgur.com/7ykZ26H.png" width="400" alt=""/></td>
+    <td><img src="images/screenshot3.png" width="300"/></td>
+    <td><img src="images/screenshot4.png" width="300"/></td>
   </tr>
 </table>
 
