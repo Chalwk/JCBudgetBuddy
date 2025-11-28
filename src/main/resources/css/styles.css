@@ -1,0 +1,144 @@
+.button {
+    -fx-cursor: hand;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-padding: 8 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);
+    -fx-transition: all 0.2s;
+}
+
+.button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 6, 0, 0, 3);
+}
+
+.primary-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-min-width: 80px;
+}
+
+.primary-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.success-button {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+    -fx-min-width: 80px;
+}
+
+.success-button:hover {
+    -fx-background-color: #27ae60;
+}
+
+.warning-button {
+    -fx-background-color: #f39c12;
+    -fx-text-fill: white;
+    -fx-min-width: 80px;
+}
+
+.warning-button:hover {
+    -fx-background-color: #d35400;
+}
+
+.danger-button {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-min-width: 80px;
+}
+
+.danger-button:hover {
+    -fx-background-color: #c0392b;
+}
+
+/* Specific button sizes */
+.button[text="Edit"] {
+    -fx-min-width: 70px;
+}
+
+.button[text="Add Invoice"],
+.button[text="Add Bill"] {
+    -fx-min-width: 110px;
+}
+
+.button[text="Export Data"],
+.button[text="Import Data"] {
+    -fx-min-width: 120px;
+}
+
+.button[text="View Payments"] {
+    -fx-min-width: 130px;
+}
+
+.button[text="Add Payment"] {
+    -fx-min-width: 120px;
+}
+
+.button[text="Delete"] {
+    -fx-min-width: 90px;
+}
+
+/* Table button styling for action columns */
+.table-button {
+    -fx-min-width: 80px;
+    -fx-font-size: 12px;
+    -fx-padding: 4 8;
+}
+
+/* Table row hover effect */
+.table-row-cell:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+.table-row-cell:filled:selected:hover {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+/* Additional styles to prevent text truncation in labels */
+.label {
+    -fx-text-overrun: clip;
+}
+
+/* Ensure table cells don't truncate text unnecessarily */
+.table-cell {
+    -fx-text-overrun: clip;
+    -fx-padding: 5px;
+}
+
+/* Card styling for dashboard */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 4);
+}
+
+/* Tab pane styling */
+.tab-pane {
+    -fx-background-color: transparent;
+}
+
+.tab {
+    -fx-background-color: #ecf0f1;
+    -fx-background-radius: 5 5 0 0;
+}
+
+.tab:selected {
+    -fx-background-color: #3498db;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: white;
+}
+
+.tab-label {
+    -fx-text-fill: #2c3e50;
+    -fx-font-weight: bold;
+}
+
+/* Prevent text truncation in buttons by setting min width based on content */
+.button {
+    -fx-content-display: CENTER;
+}

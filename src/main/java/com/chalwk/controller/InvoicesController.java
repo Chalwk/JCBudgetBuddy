@@ -69,45 +69,9 @@ public class InvoicesController implements Initializable {
 
         TableColumn<Invoice, Double> totalCol = getInvoiceDoubleTableColumn();
 
-        TableColumn<Invoice, Double> balanceCol = new TableColumn<>("Balance Owing");
-        balanceCol.setPrefWidth(120);
-        balanceCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
-            @Override
-            protected void updateItem(Double balance, boolean empty) {
-                super.updateItem(balance, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    Invoice invoice = getTableView().getItems().get(getIndex());
-                    double bal = invoice.getBalance();
-                    setText(String.format("$%.2f", bal));
-                }
-            }
-        });
+        TableColumn<Invoice, Double> balanceCol = getDoubleTableColumn();
 
-        TableColumn<Invoice, Void> paymentsCol = new TableColumn<>("Payments");
-        paymentsCol.setPrefWidth(100);
-        paymentsCol.setCellFactory(col -> new TableCell<Invoice, Void>() {
-            private final Button viewPaymentsBtn = new Button("View Payments");
-
-            {
-                viewPaymentsBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white;");
-                viewPaymentsBtn.setOnAction(e -> {
-                    Invoice invoice = getTableView().getItems().get(getIndex());
-                    viewPayments(invoice);
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(viewPaymentsBtn);
-                }
-            }
-        });
+        TableColumn<Invoice, Void> paymentsCol = getInvoiceVoidTableColumn();
 
         TableColumn<Invoice, Void> actionsCol = new TableColumn<>("Actions");
         actionsCol.setPrefWidth(200);
@@ -117,9 +81,9 @@ public class InvoicesController implements Initializable {
             private final Button addPaymentBtn = new Button("Add Payment");
 
             {
-                editBtn.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white;");
-                deleteBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
-                addPaymentBtn.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white;");
+                editBtn.getStyleClass().add("warning-button");
+                deleteBtn.getStyleClass().add("danger-button");
+                addPaymentBtn.getStyleClass().add("success-button");
 
                 editBtn.setOnAction(e -> {
                     Invoice invoice = getTableView().getItems().get(getIndex());
@@ -150,9 +114,68 @@ public class InvoicesController implements Initializable {
         });
 
         invoicesTable.getColumns().addAll(numberCol, totalCol, balanceCol, paymentsCol, actionsCol);
+
+        // Add double-click handler
+        invoicesTable.setRowFactory(tv -> {
+            TableRow<Invoice> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    Invoice invoice = row.getItem();
+                    editInvoice(invoice);
+                }
+            });
+            return row;
+        });
+    }
+
+    private TableColumn<Invoice, Void> getInvoiceVoidTableColumn() {
+        TableColumn<Invoice, Void> paymentsCol = new TableColumn<>("Payments");
+        paymentsCol.setPrefWidth(100);
+        paymentsCol.setCellFactory(col -> new TableCell<Invoice, Void>() {
+            private final Button viewPaymentsBtn = new Button("View Payments");
+
+            {
+                viewPaymentsBtn.getStyleClass().add("primary-button");
+                viewPaymentsBtn.setOnAction(e -> {
+                    Invoice invoice = getTableView().getItems().get(getIndex());
+                    viewPayments(invoice);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(viewPaymentsBtn);
+                }
+            }
+        });
+        return paymentsCol;
+    }
+
+    private static TableColumn<Invoice, Double> getDoubleTableColumn() {
+        TableColumn<Invoice, Double> balanceCol = new TableColumn<>("Balance Owing");
+        balanceCol.setPrefWidth(120);
+        balanceCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
+            @Override
+            protected void updateItem(Double balance, boolean empty) {
+                super.updateItem(balance, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    Invoice invoice = getTableView().getItems().get(getIndex());
+                    double bal = invoice.getBalance();
+                    setText(String.format("$%.2f", bal));
+                }
+            }
+        });
+        return balanceCol;
     }
 
     private void setupEventHandlers() {
+        addInvoiceBtn.getStyleClass().add("primary-button");
         addInvoiceBtn.setOnAction(e -> showInvoiceDialog(null));
     }
 
@@ -259,6 +282,62 @@ public class InvoicesController implements Initializable {
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
         dateCol.setPrefWidth(150);
 
+        TableColumn<Payment, Double> amountCol = getPaymentDoubleTableColumn();
+
+        // Add actions column for payments
+        TableColumn<Payment, Void> actionsCol = getPaymentVoidTableColumn(invoice);
+
+        paymentsTable.getColumns().addAll(dateCol, amountCol, actionsCol);
+        paymentsTable.getItems().addAll(invoice.getPayments());
+
+        vbox.getChildren().addAll(totalLabel, balanceLabel, paymentsTable);
+        dialog.getDialogPane().setContent(vbox);
+
+        // Refresh table when dialog is shown
+        dialog.setOnShown(e -> refreshPaymentsTable(paymentsTable, invoice));
+
+        dialog.showAndWait();
+    }
+
+    private TableColumn<Payment, Void> getPaymentVoidTableColumn(Invoice invoice) {
+        TableColumn<Payment, Void> actionsCol = new TableColumn<>("Actions");
+        actionsCol.setPrefWidth(150);
+        actionsCol.setCellFactory(col -> new TableCell<Payment, Void>() {
+            private final Button editBtn = new Button("Edit");
+            private final Button deleteBtn = new Button("Delete");
+
+            {
+                editBtn.getStyleClass().add("warning-button");
+                deleteBtn.getStyleClass().add("danger-button");
+                editBtn.setStyle("-fx-font-size: 10px;");
+                deleteBtn.setStyle("-fx-font-size: 10px;");
+
+                editBtn.setOnAction(e -> {
+                    Payment payment = getTableView().getItems().get(getIndex());
+                    editPayment(invoice, payment);
+                });
+
+                deleteBtn.setOnAction(e -> {
+                    Payment payment = getTableView().getItems().get(getIndex());
+                    deletePayment(invoice, payment);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    HBox buttons = new HBox(5, editBtn, deleteBtn);
+                    setGraphic(buttons);
+                }
+            }
+        });
+        return actionsCol;
+    }
+
+    private static TableColumn<Payment, Double> getPaymentDoubleTableColumn() {
         TableColumn<Payment, Double> amountCol = new TableColumn<>("Amount");
         amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
         amountCol.setPrefWidth(100);
@@ -273,14 +352,74 @@ public class InvoicesController implements Initializable {
                 }
             }
         });
+        return amountCol;
+    }
 
-        paymentsTable.getColumns().addAll(dateCol, amountCol);
-        paymentsTable.getItems().addAll(invoice.getPayments());
+    private void refreshPaymentsTable(TableView<Payment> paymentsTable, Invoice invoice) {
+        paymentsTable.getItems().setAll(invoice.getPayments());
+    }
 
-        vbox.getChildren().addAll(totalLabel, balanceLabel, paymentsTable);
-        dialog.getDialogPane().setContent(vbox);
+    private void editPayment(Invoice invoice, Payment payment) {
+        Dialog<Payment> dialog = new Dialog<>();
+        dialog.setTitle("Edit Payment");
 
-        dialog.showAndWait();
+        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new javafx.geometry.Insets(20, 10, 10, 10));
+
+        DatePicker datePicker = new DatePicker();
+        datePicker.setValue(LocalDate.parse(payment.getDate()));
+        TextField amountField = new TextField(String.valueOf(payment.getAmount()));
+
+        grid.add(new Label("Date:"), 0, 0);
+        grid.add(datePicker, 1, 0);
+        grid.add(new Label("Amount:"), 0, 1);
+        grid.add(amountField, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButtonType) {
+                try {
+                    return new Payment(
+                            datePicker.getValue().format(DateTimeFormatter.ISO_DATE),
+                            Double.parseDouble(amountField.getText())
+                    );
+                } catch (NumberFormatException e) {
+                    showAlert();
+                    return null;
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait().ifPresent(updatedPayment -> {
+            int paymentIndex = invoice.getPayments().indexOf(payment);
+            if (paymentIndex != -1) {
+                invoice.getPayments().set(paymentIndex, updatedPayment);
+                refreshTable();
+                mainController.saveUserData();
+            }
+        });
+    }
+
+    private void deletePayment(Invoice invoice, Payment payment) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete");
+        alert.setHeaderText("Delete Payment");
+        alert.setContentText("Are you sure you want to delete this payment?");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                invoice.getPayments().remove(payment);
+                refreshTable();
+                mainController.saveUserData();
+            }
+        });
     }
 
     private void addPayment(Invoice invoice) {

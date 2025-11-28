@@ -21,8 +21,18 @@ public class Main extends Application {
             throw new RuntimeException("FXML file not found: /fxml/main.fxml. Make sure it exists in resources/fxml/");
         }
         Parent root = FXMLLoader.load(fxmlLocation);
+
+        Scene scene = new Scene(root, 1200, 800);
+
+        URL cssResource = getClass().getResource("/css/styles.css");
+        if (cssResource != null) {
+            scene.getStylesheets().add(cssResource.toExternalForm());
+        } else {
+            System.err.println("CSS file not found: /css/styles.css");
+        }
+
         primaryStage.setTitle("JCBudgetBuddy - Personal Finance Tracker");
-        primaryStage.setScene(new Scene(root, 1200, 800));
+        primaryStage.setScene(scene);
         primaryStage.setMinWidth(1000);
         primaryStage.setMinHeight(700);
         primaryStage.show();

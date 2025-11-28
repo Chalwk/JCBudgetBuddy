@@ -37,10 +37,6 @@ public class DashboardController implements Initializable {
         updateCalculations();
     }
 
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
-
     private void setupEventHandlers() {
         editIncomeBtn.setOnAction(e -> editWeeklyIncome());
     }

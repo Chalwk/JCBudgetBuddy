@@ -46,20 +46,7 @@ public class WeeklyBillsController implements Initializable {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         nameCol.setPrefWidth(200);
 
-        TableColumn<Bill, Double> amountCol = new TableColumn<>("Amount");
-        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        amountCol.setPrefWidth(100);
-        amountCol.setCellFactory(col -> new TableCell<Bill, Double>() {
-            @Override
-            protected void updateItem(Double amount, boolean empty) {
-                super.updateItem(amount, empty);
-                if (empty || amount == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("$%.2f", amount));
-                }
-            }
-        });
+        TableColumn<Bill, Double> amountCol = getBillDoubleTableColumn();
 
         TableColumn<Bill, String> frequencyCol = new TableColumn<>("Frequency");
         frequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
@@ -73,6 +60,24 @@ public class WeeklyBillsController implements Initializable {
         notesCol.setCellValueFactory(new PropertyValueFactory<>("notes"));
         notesCol.setPrefWidth(250);
 
+        TableColumn<Bill, Void> actionsCol = getBillVoidTableColumn();
+
+        billsTable.getColumns().addAll(nameCol, amountCol, frequencyCol, dayCol, notesCol, actionsCol);
+
+        // Add double-click handler
+        billsTable.setRowFactory(tv -> {
+            TableRow<Bill> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    Bill bill = row.getItem();
+                    editBill(bill);
+                }
+            });
+            return row;
+        });
+    }
+
+    private TableColumn<Bill, Void> getBillVoidTableColumn() {
         TableColumn<Bill, Void> actionsCol = new TableColumn<>("Actions");
         actionsCol.setPrefWidth(150);
         actionsCol.setCellFactory(col -> new TableCell<Bill, Void>() {
@@ -80,8 +85,8 @@ public class WeeklyBillsController implements Initializable {
             private final Button deleteBtn = new Button("Delete");
 
             {
-                editBtn.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white;");
-                deleteBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
+                editBtn.getStyleClass().add("warning-button");
+                deleteBtn.getStyleClass().add("danger-button");
 
                 editBtn.setOnAction(e -> {
                     Bill bill = getTableView().getItems().get(getIndex());
@@ -105,11 +110,29 @@ public class WeeklyBillsController implements Initializable {
                 }
             }
         });
+        return actionsCol;
+    }
 
-        billsTable.getColumns().addAll(nameCol, amountCol, frequencyCol, dayCol, notesCol, actionsCol);
+    private static TableColumn<Bill, Double> getBillDoubleTableColumn() {
+        TableColumn<Bill, Double> amountCol = new TableColumn<>("Amount");
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        amountCol.setPrefWidth(100);
+        amountCol.setCellFactory(col -> new TableCell<Bill, Double>() {
+            @Override
+            protected void updateItem(Double amount, boolean empty) {
+                super.updateItem(amount, empty);
+                if (empty || amount == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("$%.2f", amount));
+                }
+            }
+        });
+        return amountCol;
     }
 
     private void setupEventHandlers() {
+        addBillBtn.getStyleClass().add("primary-button");
         addBillBtn.setOnAction(e -> showBillDialog(null));
     }
 

@@ -45,20 +45,7 @@ public class MonthlyBillsController implements Initializable {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         nameCol.setPrefWidth(200);
 
-        TableColumn<Bill, Double> amountCol = new TableColumn<>("Amount");
-        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        amountCol.setPrefWidth(100);
-        amountCol.setCellFactory(col -> new TableCell<Bill, Double>() {
-            @Override
-            protected void updateItem(Double amount, boolean empty) {
-                super.updateItem(amount, empty);
-                if (empty || amount == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("$%.2f", amount));
-                }
-            }
-        });
+        TableColumn<Bill, Double> amountCol = getBillDoubleTableColumn();
 
         TableColumn<Bill, String> frequencyCol = new TableColumn<>("Frequency");
         frequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
@@ -76,6 +63,24 @@ public class MonthlyBillsController implements Initializable {
         paymentMethodCol.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
         paymentMethodCol.setPrefWidth(150);
 
+        TableColumn<Bill, Void> actionsCol = getBillVoidTableColumn();
+
+        billsTable.getColumns().addAll(nameCol, amountCol, frequencyCol, dayCol, notesCol, paymentMethodCol, actionsCol);
+
+        // Add double-click handler
+        billsTable.setRowFactory(tv -> {
+            TableRow<Bill> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    Bill bill = row.getItem();
+                    editBill(bill);
+                }
+            });
+            return row;
+        });
+    }
+
+    private TableColumn<Bill, Void> getBillVoidTableColumn() {
         TableColumn<Bill, Void> actionsCol = new TableColumn<>("Actions");
         actionsCol.setPrefWidth(150);
         actionsCol.setCellFactory(col -> new TableCell<Bill, Void>() {
@@ -83,8 +88,8 @@ public class MonthlyBillsController implements Initializable {
             private final Button deleteBtn = new Button("Delete");
 
             {
-                editBtn.setStyle("-fx-background-color: #f39c12; -fx-text-fill: white;");
-                deleteBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
+                editBtn.getStyleClass().add("warning-button");
+                deleteBtn.getStyleClass().add("danger-button");
 
                 editBtn.setOnAction(e -> {
                     Bill bill = getTableView().getItems().get(getIndex());
@@ -108,11 +113,29 @@ public class MonthlyBillsController implements Initializable {
                 }
             }
         });
+        return actionsCol;
+    }
 
-        billsTable.getColumns().addAll(nameCol, amountCol, frequencyCol, dayCol, notesCol, paymentMethodCol, actionsCol);
+    private static TableColumn<Bill, Double> getBillDoubleTableColumn() {
+        TableColumn<Bill, Double> amountCol = new TableColumn<>("Amount");
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        amountCol.setPrefWidth(100);
+        amountCol.setCellFactory(col -> new TableCell<Bill, Double>() {
+            @Override
+            protected void updateItem(Double amount, boolean empty) {
+                super.updateItem(amount, empty);
+                if (empty || amount == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("$%.2f", amount));
+                }
+            }
+        });
+        return amountCol;
     }
 
     private void setupEventHandlers() {
+        addBillBtn.getStyleClass().add("primary-button");
         addBillBtn.setOnAction(e -> showBillDialog(null));
     }
 
@@ -174,7 +197,7 @@ public class MonthlyBillsController implements Initializable {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == saveButtonType) {
                 try {
-                    Bill result = new Bill(
+                    return new Bill(
                             bill != null ? bill.getId() : generateNewId(),
                             nameField.getText(),
                             Double.parseDouble(amountField.getText()),
@@ -183,9 +206,8 @@ public class MonthlyBillsController implements Initializable {
                             notesField.getText(),
                             paymentMethodCombo.getValue()
                     );
-                    return result;
                 } catch (NumberFormatException e) {
-                    showAlert("Invalid amount format");
+                    showAlert();
                     return null;
                 }
             }
@@ -232,11 +254,11 @@ public class MonthlyBillsController implements Initializable {
                 .orElse(0) + 1;
     }
 
-    private void showAlert(String message) {
+    private void showAlert() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText("Invalid amount format");
         alert.showAndWait();
     }
 }
