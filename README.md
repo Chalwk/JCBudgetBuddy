@@ -27,9 +27,11 @@ A personal finance tracker built with JavaFX for managing weekly and monthly exp
 4. **Permissions** - Allow permissions when prompted by the installer
 5. **Completion** - Click "Finish" to complete installation
 
-**Note**: If the installer doesn't open after the first attempt (a rare Windows 10 issue), simply run the executable again.
+**Note**: If the installer doesn't open after the first attempt (a rare Windows 10 issue), simply run the executable
+again.
 
 After installation, you can launch JCBudgetBuddy from:
+
 - Desktop shortcut
 - Start menu (search for "JCBudgetBuddy")
 
