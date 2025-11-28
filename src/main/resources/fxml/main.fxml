@@ -39,7 +39,7 @@
     </TabPane>
 
     <!-- Copyright Notice -->
-    <HBox alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+    <HBox alignment="CENTER" style="-fx-padding: 15 0 0 0;">
         <Label text="© Copyright 2025 JCBudgetBuddy | Jericho Crosby (Chalwk)"
                style="-fx-text-fill: #95a5a6; -fx-font-size: 11px;"/>
     </HBox>

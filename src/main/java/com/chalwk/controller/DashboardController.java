@@ -51,13 +51,9 @@ public class DashboardController implements Initializable {
         if (userData == null) return;
 
         double totalWeeklyIncome = userData.getTotalWeeklyIncome();
-
-        // Count active income streams
         long activeStreamsCount = userData.getIncomeStreams().stream()
                 .filter(IncomeStream::isActive)
                 .count();
-
-        // Calculate weekly expenses from weekly bills (adjusting for frequency)
         double weeklyExpensesFromWeeklyBills = userData.getWeeklyBills().stream()
                 .mapToDouble(bill -> switch (bill.getFrequency()) {
                     case "Bi-Weekly" -> bill.getAmount() / 2;
@@ -65,8 +61,6 @@ public class DashboardController implements Initializable {
                     default -> bill.getAmount();
                 })
                 .sum();
-
-        // Calculate weekly expenses from monthly bills (only automatic payments)
         double weeklyExpensesFromMonthlyBills = userData.getMonthlyBills().stream()
                 .filter(bill -> "automatic".equals(bill.getPaymentMethod()))
                 .mapToDouble(bill -> switch (bill.getFrequency()) {
@@ -86,13 +80,13 @@ public class DashboardController implements Initializable {
         monthlyAverageLabel.setText(String.format("$%.2f", monthlyAverage));
 
         // Update income streams count
-        incomeStreamsCountLabel.setText(activeStreamsCount + " active income streams");
+        incomeStreamsCountLabel.setText("From " + activeStreamsCount + " active income streams");
 
         // Set color based on balance
         if (remainingBalance >= 0) {
-            remainingBalanceLabel.setStyle("-fx-text-fill: #2ecc71;");
+            remainingBalanceLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2ecc71;");
         } else {
-            remainingBalanceLabel.setStyle("-fx-text-fill: #e74c3c;");
+            remainingBalanceLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;");
         }
     }
 
