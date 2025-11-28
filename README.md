@@ -13,6 +13,19 @@ A personal finance tracker built with JavaFX for managing weekly and monthly exp
 
 ---
 
+<table>
+  <tr>
+    <td><img src="https://i.imgur.com/ZRlDfzS.png" width="400" alt=""/></td>
+    <td><img src="https://i.imgur.com/O0pqVh9.png" width="400" alt=""/></td>
+  </tr>
+  <tr>
+    <td><img src="https://i.imgur.com/YZcEA2l.png" width="400" alt=""/></td>
+    <td><img src="https://i.imgur.com/7ykZ26H.png" width="400" alt=""/></td>
+  </tr>
+</table>
+
+---
+
 ## Installation
 
 1. **Run the installer** - Double-click the `JCBudgetBuddy.exe` file
