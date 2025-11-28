@@ -65,93 +65,6 @@ public class IncomeController implements Initializable {
         return amountCol;
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        setupIncomeStreamsTable();
-        setupOneTimePaymentsTable();
-        setupEventHandlers();
-    }
-
-    public void setUserData(UserData userData) {
-        this.userData = userData;
-        refreshTables();
-        updateSummary();
-    }
-
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
-
-    @SuppressWarnings("unchecked")
-    private void setupIncomeStreamsTable() {
-        incomeStreamsTable.getColumns().clear();
-
-        TableColumn<IncomeStream, String> nameCol = new TableColumn<>("Name");
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        nameCol.setPrefWidth(100);
-
-        TableColumn<IncomeStream, Double> amountCol = getIncomeStreamDoubleTableColumn();
-
-        TableColumn<IncomeStream, String> frequencyCol = new TableColumn<>("Frequency");
-        frequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
-        frequencyCol.setPrefWidth(80);
-
-        TableColumn<IncomeStream, LocalDate> startDateCol = getIncomeStreamLocalDateTableColumn();
-
-        TableColumn<IncomeStream, LocalDate> endDateCol = getStreamLocalDateTableColumn();
-
-        TableColumn<IncomeStream, String> statusCol = getIncomeStreamStringTableColumn();
-
-        TableColumn<IncomeStream, String> notesCol = new TableColumn<>("Notes");
-        notesCol.setCellValueFactory(new PropertyValueFactory<>("notes"));
-        notesCol.setPrefWidth(200);
-
-        TableColumn<IncomeStream, Void> actionsCol = new TableColumn<>("Actions");
-        actionsCol.setPrefWidth(300);
-        actionsCol.setCellFactory(col -> new TableCell<>() {
-            private final Button editBtn = new Button("Edit");
-            private final Button toggleBtn = new Button("Toggle");
-            private final Button deleteBtn = new Button("Delete");
-
-            {
-                editBtn.getStyleClass().addAll("warning-button", "table-button");
-                toggleBtn.getStyleClass().addAll("primary-button", "table-button");
-                deleteBtn.getStyleClass().addAll("danger-button", "table-button");
-
-                editBtn.setOnAction(e -> {
-                    IncomeStream stream = getTableView().getItems().get(getIndex());
-                    editIncomeStream(stream);
-                });
-
-                toggleBtn.setOnAction(e -> {
-                    IncomeStream stream = getTableView().getItems().get(getIndex());
-                    toggleIncomeStream(stream);
-                });
-
-                deleteBtn.setOnAction(e -> {
-                    IncomeStream stream = getTableView().getItems().get(getIndex());
-                    deleteIncomeStream(stream);
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    IncomeStream stream = getTableView().getItems().get(getIndex());
-                    toggleBtn.setText(stream.isActive() ? "End" : "Activate");
-                    HBox buttons = new HBox(5, editBtn, toggleBtn, deleteBtn);
-                    buttons.getStyleClass().add("actions-container");
-                    setGraphic(buttons);
-                }
-            }
-        });
-
-        incomeStreamsTable.getColumns().addAll(nameCol, amountCol, frequencyCol, startDateCol, endDateCol, statusCol, notesCol, actionsCol);
-    }
-
     private static TableColumn<IncomeStream, String> getIncomeStreamStringTableColumn() {
         TableColumn<IncomeStream, String> statusCol = new TableColumn<>("Status");
         statusCol.setPrefWidth(80);
@@ -196,6 +109,128 @@ public class IncomeController implements Initializable {
             }
         });
         return endDateCol;
+    }
+
+    private static TableColumn<OneTimePayment, LocalDate> getOneTimePaymentLocalDateTableColumn() {
+        TableColumn<OneTimePayment, LocalDate> dateCol = new TableColumn<>("Date");
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("paymentDate"));
+        dateCol.setPrefWidth(100);
+        dateCol.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (empty || date == null) {
+                    setText(null);
+                } else {
+                    setText(date.format(DateTimeFormatter.ofPattern("MMM dd, yyyy")));
+                }
+            }
+        });
+        return dateCol;
+    }
+
+    private static TableColumn<OneTimePayment, Double> getOneTimePaymentDoubleTableColumn() {
+        TableColumn<OneTimePayment, Double> amountCol = new TableColumn<>("Amount");
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        amountCol.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double amount, boolean empty) {
+                super.updateItem(amount, empty);
+                if (empty || amount == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("$%.2f", amount));
+                }
+            }
+        });
+        return amountCol;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setupIncomeStreamsTable();
+        setupOneTimePaymentsTable();
+        setupEventHandlers();
+    }
+
+    public void setUserData(UserData userData) {
+        this.userData = userData;
+        refreshTables();
+        updateSummary();
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setupIncomeStreamsTable() {
+        incomeStreamsTable.getColumns().clear();
+
+        TableColumn<IncomeStream, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nameCol.setPrefWidth(150);
+
+        TableColumn<IncomeStream, Double> amountCol = getIncomeStreamDoubleTableColumn();
+
+        TableColumn<IncomeStream, String> frequencyCol = new TableColumn<>("Frequency");
+        frequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
+        frequencyCol.setPrefWidth(80);
+
+        TableColumn<IncomeStream, LocalDate> startDateCol = getIncomeStreamLocalDateTableColumn();
+
+        TableColumn<IncomeStream, LocalDate> endDateCol = getStreamLocalDateTableColumn();
+
+        TableColumn<IncomeStream, String> statusCol = getIncomeStreamStringTableColumn();
+
+        TableColumn<IncomeStream, String> notesCol = new TableColumn<>("Notes");
+        notesCol.setCellValueFactory(new PropertyValueFactory<>("notes"));
+        notesCol.setPrefWidth(200);
+
+        TableColumn<IncomeStream, Void> actionsCol = new TableColumn<>("Actions");
+        actionsCol.setPrefWidth(275);
+        actionsCol.setCellFactory(col -> new TableCell<>() {
+            private final Button editBtn = new Button("Edit");
+            private final Button toggleBtn = new Button("Toggle");
+            private final Button deleteBtn = new Button("Delete");
+
+            {
+                editBtn.getStyleClass().addAll("warning-button", "table-button");
+                toggleBtn.getStyleClass().addAll("primary-button", "table-button");
+                deleteBtn.getStyleClass().addAll("danger-button", "table-button");
+
+                editBtn.setOnAction(e -> {
+                    IncomeStream stream = getTableView().getItems().get(getIndex());
+                    editIncomeStream(stream);
+                });
+
+                toggleBtn.setOnAction(e -> {
+                    IncomeStream stream = getTableView().getItems().get(getIndex());
+                    toggleIncomeStream(stream);
+                });
+
+                deleteBtn.setOnAction(e -> {
+                    IncomeStream stream = getTableView().getItems().get(getIndex());
+                    deleteIncomeStream(stream);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    IncomeStream stream = getTableView().getItems().get(getIndex());
+                    toggleBtn.setText(stream.isActive() ? "End" : "Activate");
+                    HBox buttons = new HBox(5, editBtn, toggleBtn, deleteBtn);
+                    buttons.getStyleClass().add("actions-container");
+                    setGraphic(buttons);
+                }
+            }
+        });
+
+        incomeStreamsTable.getColumns().addAll(nameCol, amountCol, frequencyCol, startDateCol, endDateCol, statusCol, notesCol, actionsCol);
     }
 
     @SuppressWarnings("unchecked")
@@ -258,42 +293,6 @@ public class IncomeController implements Initializable {
             }
         });
         return actionsCol;
-    }
-
-    private static TableColumn<OneTimePayment, LocalDate> getOneTimePaymentLocalDateTableColumn() {
-        TableColumn<OneTimePayment, LocalDate> dateCol = new TableColumn<>("Date");
-        dateCol.setCellValueFactory(new PropertyValueFactory<>("paymentDate"));
-        dateCol.setPrefWidth(100);
-        dateCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                if (empty || date == null) {
-                    setText(null);
-                } else {
-                    setText(date.format(DateTimeFormatter.ofPattern("MMM dd, yyyy")));
-                }
-            }
-        });
-        return dateCol;
-    }
-
-    private static TableColumn<OneTimePayment, Double> getOneTimePaymentDoubleTableColumn() {
-        TableColumn<OneTimePayment, Double> amountCol = new TableColumn<>("Amount");
-        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        amountCol.setPrefWidth(100);
-        amountCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double amount, boolean empty) {
-                super.updateItem(amount, empty);
-                if (empty || amount == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("$%.2f", amount));
-                }
-            }
-        });
-        return amountCol;
     }
 
     private void setupEventHandlers() {

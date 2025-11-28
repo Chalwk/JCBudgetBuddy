@@ -25,7 +25,7 @@ public class WeeklyBillsController implements Initializable {
     private static TableColumn<Bill, Double> getBillDoubleTableColumn() {
         TableColumn<Bill, Double> amountCol = new TableColumn<>("Amount");
         amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        amountCol.setCellFactory(col -> new TableCell<Bill, Double>() {
+        amountCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Double amount, boolean empty) {
                 super.updateItem(amount, empty);
@@ -93,7 +93,7 @@ public class WeeklyBillsController implements Initializable {
 
     private TableColumn<Bill, Void> getBillVoidTableColumn() {
         TableColumn<Bill, Void> actionsCol = new TableColumn<>("Actions");
-        actionsCol.setCellFactory(col -> new TableCell<Bill, Void>() {
+        actionsCol.setCellFactory(col -> new TableCell<>() {
             private final Button editBtn = new Button("Edit");
             private final Button deleteBtn = new Button("Delete");
 

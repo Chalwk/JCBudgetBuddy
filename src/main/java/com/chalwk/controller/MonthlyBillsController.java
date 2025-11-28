@@ -168,7 +168,7 @@ public class MonthlyBillsController implements Initializable {
         columns[1].setPrefWidth(availableWidth * 0.12); // Amount
         columns[2].setPrefWidth(availableWidth * 0.12); // Frequency
         columns[3].setPrefWidth(availableWidth * 0.15); // Payment Day
-        columns[4].setPrefWidth(availableWidth * 0.18); // Notes
+        columns[4].setPrefWidth(availableWidth * 0.28); // Notes
         columns[5].setPrefWidth(availableWidth * 0.10); // Payment Method
 
         // Set fixed width for actions column
