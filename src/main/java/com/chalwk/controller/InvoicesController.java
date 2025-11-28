@@ -3,6 +3,8 @@ package com.chalwk.controller;
 import com.chalwk.model.Invoice;
 import com.chalwk.model.Payment;
 import com.chalwk.model.UserData;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -10,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -26,41 +29,6 @@ public class InvoicesController implements Initializable {
 
     private UserData userData;
     private MainController mainController;
-
-    private static TableColumn<Invoice, Double> getInvoiceDoubleTableColumn() {
-        TableColumn<Invoice, Double> totalCol = new TableColumn<>("Total Amount");
-        totalCol.setCellValueFactory(new PropertyValueFactory<>("total"));
-        totalCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double total, boolean empty) {
-                super.updateItem(total, empty);
-                if (empty || total == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("$%.2f", total));
-                }
-            }
-        });
-        return totalCol;
-    }
-
-    private static TableColumn<Invoice, Double> getDoubleTableColumn() {
-        TableColumn<Invoice, Double> balanceCol = new TableColumn<>("Balance Owing");
-        balanceCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double balance, boolean empty) {
-                super.updateItem(balance, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    Invoice invoice = getTableView().getItems().get(getIndex());
-                    double bal = invoice.getBalance();
-                    setText(String.format("$%.2f", bal));
-                }
-            }
-        });
-        return balanceCol;
-    }
 
     private static TableColumn<Payment, Double> getPaymentDoubleTableColumn() {
         TableColumn<Payment, Double> amountCol = new TableColumn<>("Amount");
@@ -100,16 +68,19 @@ public class InvoicesController implements Initializable {
         invoicesTable.getColumns().clear();
 
         TableColumn<Invoice, String> numberCol = new TableColumn<>("Invoice Number");
-        numberCol.setCellValueFactory(new PropertyValueFactory<>("number"));
+        numberCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().number()));
+        numberCol.setPrefWidth(150);
 
         TableColumn<Invoice, Double> totalCol = getInvoiceDoubleTableColumn();
 
         TableColumn<Invoice, Double> balanceCol = getDoubleTableColumn();
 
         TableColumn<Invoice, Void> paymentsCol = getInvoiceVoidTableColumn();
+        paymentsCol.setPrefWidth(120);
 
         TableColumn<Invoice, Void> actionsCol = new TableColumn<>("Actions");
-        actionsCol.setCellFactory(col -> new TableCell<>() {
+        actionsCol.setPrefWidth(200);
+        actionsCol.setCellFactory(col -> new TableCell<Invoice, Void>() {
             private final Button editBtn = new Button("Edit");
             private final Button deleteBtn = new Button("Delete");
             private final Button addPaymentBtn = new Button("Add Payment");
@@ -161,6 +132,52 @@ public class InvoicesController implements Initializable {
             });
             return row;
         });
+    }
+
+    private static TableColumn<Invoice, Double> getDoubleTableColumn() {
+        TableColumn<Invoice, Double> balanceCol = new TableColumn<>("Balance Owing");
+        balanceCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
+            @Override
+            protected void updateItem(Double balance, boolean empty) {
+                super.updateItem(balance, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    Invoice invoice = getTableView().getItems().get(getIndex());
+                    double bal = invoice.getBalance();
+                    setText(String.format("$%.2f", bal));
+
+                    // Color coding for balance
+                    if (bal == 0) {
+                        setTextFill(Color.GREEN);
+                    } else if (bal > 0) {
+                        setTextFill(Color.ORANGE);
+                    } else {
+                        setTextFill(Color.RED);
+                    }
+                }
+            }
+        });
+        balanceCol.setPrefWidth(100);
+        return balanceCol;
+    }
+
+    private static TableColumn<Invoice, Double> getInvoiceDoubleTableColumn() {
+        TableColumn<Invoice, Double> totalCol = new TableColumn<>("Total Amount");
+        totalCol.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().total()).asObject());
+        totalCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
+            @Override
+            protected void updateItem(Double total, boolean empty) {
+                super.updateItem(total, empty);
+                if (empty || total == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("$%.2f", total));
+                }
+            }
+        });
+        totalCol.setPrefWidth(100);
+        return totalCol;
     }
 
     private TableColumn<Invoice, Void> getInvoiceVoidTableColumn() {
