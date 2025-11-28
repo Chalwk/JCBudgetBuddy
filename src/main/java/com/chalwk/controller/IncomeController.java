@@ -269,17 +269,57 @@ public class IncomeController implements Initializable {
         startDatePicker.setValue(LocalDate.now());
         activeCheckbox.setSelected(true);
 
+        // Set up listener to handle one-off frequency changes
+        frequencyCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
+            boolean isOneOff = "one-off".equals(newVal);
+
+            // Disable start/end date fields for one-off payments
+            startDatePicker.setDisable(isOneOff);
+            endDatePicker.setDisable(isOneOff);
+
+            // Disable active checkbox for one-off payments (managed automatically)
+            activeCheckbox.setDisable(isOneOff);
+
+            if (isOneOff) {
+                // Set default values for one-off payments
+                startDatePicker.setValue(LocalDate.now());
+                endDatePicker.setValue(null);
+                // Active status will be managed automatically based on amount
+                activeCheckbox.setSelected(true);
+            }
+        });
+
         if (stream != null) {
             nameField.setText(stream.getName());
             amountField.setText(String.valueOf(stream.getAmount()));
             frequencyCombo.setValue(stream.getFrequency());
-            startDatePicker.setValue(stream.getStartDate());
-            if (stream.getEndDate() != null) {
-                endDatePicker.setValue(stream.getEndDate());
+
+            boolean isOneOff = "one-off".equals(stream.getFrequency());
+
+            if (!isOneOff) {
+                startDatePicker.setValue(stream.getStartDate());
+                if (stream.getEndDate() != null) {
+                    endDatePicker.setValue(stream.getEndDate());
+                }
+                activeCheckbox.setSelected(stream.isActive());
+            } else {
+                // For one-off, use current date and disable fields
+                startDatePicker.setValue(LocalDate.now());
+                startDatePicker.setDisable(true);
+                endDatePicker.setDisable(true);
+                activeCheckbox.setDisable(true);
+                // Active status is managed automatically for one-off
+                activeCheckbox.setSelected(stream.getAmount() > 0);
             }
-            activeCheckbox.setSelected(stream.isActive());
+
             notesField.setText(stream.getNotes());
         }
+
+        // Set initial state based on current frequency
+        boolean initialIsOneOff = "one-off".equals(frequencyCombo.getValue());
+        startDatePicker.setDisable(initialIsOneOff);
+        endDatePicker.setDisable(initialIsOneOff);
+        activeCheckbox.setDisable(initialIsOneOff);
 
         grid.add(new Label("Name:"), 0, 0);
         grid.add(nameField, 1, 0);
@@ -301,14 +341,24 @@ public class IncomeController implements Initializable {
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == saveButtonType) {
                 try {
+                    String frequency = frequencyCombo.getValue();
+                    boolean isOneOff = "one-off".equals(frequency);
+
+                    // For one-off payments, active status is determined by amount
+                    boolean active = isOneOff ? (Double.parseDouble(amountField.getText()) > 0) : activeCheckbox.isSelected();
+
+                    // For one-off payments, use current date as start date and no end date
+                    LocalDate startDate = isOneOff ? LocalDate.now() : startDatePicker.getValue();
+                    LocalDate endDate = isOneOff ? null : endDatePicker.getValue();
+
                     return new IncomeStream(
                             stream != null ? stream.getId() : generateNewIncomeStreamId(),
                             nameField.getText(),
                             Double.parseDouble(amountField.getText()),
-                            frequencyCombo.getValue(),
-                            startDatePicker.getValue(),
-                            endDatePicker.getValue(),
-                            activeCheckbox.isSelected(),
+                            frequency,
+                            startDate,
+                            endDate,
+                            active,
                             notesField.getText()
                     );
                 } catch (NumberFormatException e) {
@@ -338,7 +388,15 @@ public class IncomeController implements Initializable {
     }
 
     private void toggleIncomeStream(IncomeStream stream) {
-        stream.setActive(!stream.isActive());
+        if ("one-off".equals(stream.getFrequency())) {
+            if (stream.isActive() && stream.getAmount() > 0) {
+                stream.setActive(false);
+            } else if (!stream.isActive() && stream.getAmount() > 0) {
+                stream.setActive(true);
+            }
+        } else {
+            stream.setActive(!stream.isActive());
+        }
         refreshTables();
         mainController.saveUserData();
     }

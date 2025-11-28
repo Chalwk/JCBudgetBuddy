@@ -36,6 +36,10 @@ public class IncomeStream {
         this.endDate = endDate;
         this.active = active;
         this.notes = notes;
+
+        if ("one-off".equals(frequency) && amount == 0) {
+            this.active = false;
+        }
     }
 
     public int getId() {
@@ -52,6 +56,9 @@ public class IncomeStream {
 
     public void setAmount(double amount) {
         this.amount = amount;
+        if ("one-off".equals(this.frequency) && amount == 0) {
+            this.active = false;
+        }
     }
 
     public String getFrequency() {
@@ -67,11 +74,22 @@ public class IncomeStream {
     }
 
     public boolean isActive() {
+        if ("one-off".equals(frequency)) {
+            return amount > 0;
+        }
         return active;
     }
 
     public void setActive(boolean active) {
-        this.active = active;
+        if ("one-off".equals(frequency)) {
+            if (active && this.amount > 0) {
+                this.active = true;
+            } else if (!active) {
+                this.active = false;
+            }
+        } else {
+            this.active = active;
+        }
     }
 
     public String getNotes() {
@@ -79,12 +97,19 @@ public class IncomeStream {
     }
 
     public double getWeeklyAmount() {
-        if (!active) return 0.0;
+        if (!isActive()) return 0.0;
 
         return switch (frequency) {
             case "fortnightly" -> amount / 2;
             case "monthly" -> amount / 4.33;
             case "yearly" -> amount / 52;
+            case "one-off" -> {
+                if (amount > 0) {
+                    yield amount;
+                } else {
+                    yield 0.0;
+                }
+            }
             default -> amount;
         };
     }
