@@ -37,3 +37,6 @@ The built installer will be available in the `build/jpackage` directory.
 
 - Windows 10/11
 - Java 21 Runtime (included in installer)
+
+### [LICENSE](LICENSE)
+Licensed under the [MIT License](LICENSE).

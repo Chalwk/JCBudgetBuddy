@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -39,9 +38,8 @@
         </Tab>
     </TabPane>
 
-    <!-- Copyright Notice -->
-    <HBox alignment="CENTER" style="-fx-padding: 10 0 0 0;">
-        <Label text="© Copyright 2025 JCBudgetBuddy | Jericho Crosby (Chalwk)"
-               style="-fx-text-fill: #95a5a6; -fx-font-size: 11px;"/>
+    <HBox alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+        <Label text="© 2025 Jericho Crosby (Chalwk) | JCBudgetBuddy is MIT Licensed"
+               style="-fx-text-fill: #666666; -fx-font-size: 12px;"/>
     </HBox>
 </VBox>

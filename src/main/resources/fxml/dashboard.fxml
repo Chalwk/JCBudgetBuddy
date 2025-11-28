@@ -31,8 +31,10 @@
             </VBox>
             <Button fx:id="manageIncomeBtn" text="Manage" styleClass="primary-button" minWidth="70"/>
         </HBox>
-        <Label fx:id="weeklyIncomeLabel" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2ecc71;"/>
-        <Label fx:id="incomeStreamsCountLabel" style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;"/>
+        <Label fx:id="weeklyIncomeLabel"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2ecc71; -fx-translate-y: -7px"/>
+        <Label fx:id="incomeStreamsCountLabel"
+               style="-fx-text-fill: #95a5a6; -fx-font-size: 12px; -fx-translate-y: 5px;"/>
     </VBox>
 
     <!-- Weekly Expenses Card -->
@@ -46,7 +48,7 @@
                    style="-fx-font-weight: bold; -fx-text-fill: #3498db; -fx-font-size: 16px; -fx-wrap-text: true;"/>
         </VBox>
         <Label fx:id="weeklyExpensesLabel" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;"/>
-        <Label text="Total" style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;"/>
+        <Label text="Total" style="-fx-text-fill: #95a5a6; -fx-font-size: 12px; -fx-translate-y: 12px;"/>
     </VBox>
 
     <!-- Remaining Balance Card -->
@@ -60,7 +62,7 @@
                    style="-fx-font-weight: bold; -fx-text-fill: #3498db; -fx-font-size: 16px; -fx-wrap-text: true;"/>
         </VBox>
         <Label fx:id="remainingBalanceLabel" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-        <Label text="Weekly" style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;"/>
+        <Label text="Weekly" style="-fx-text-fill: #95a5a6; -fx-font-size: 12px; -fx-translate-y: 12px;"/>
     </VBox>
 
     <!-- Monthly Average Card -->
@@ -74,6 +76,6 @@
                    style="-fx-font-weight: bold; -fx-text-fill: #3498db; -fx-font-size: 16px; -fx-wrap-text: true;"/>
         </VBox>
         <Label fx:id="monthlyAverageLabel" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
-        <Label text="From Weekly" style="-fx-text-fill: #95a5a6; -fx-font-size: 12px;"/>
+        <Label text="From Weekly" style="-fx-text-fill: #95a5a6; -fx-font-size: 12px; -fx-translate-y: 12px;"/>
     </VBox>
 </GridPane>

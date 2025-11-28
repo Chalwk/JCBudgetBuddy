@@ -1,3 +1,7 @@
+// JCBudgetBuddy
+// Copyright (c) 2025 Jericho Crosby (Chalwk)
+// Licensed under the MIT License.
+
 package com.chalwk.controller;
 
 import com.chalwk.model.Invoice;
@@ -7,6 +11,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
@@ -227,15 +232,15 @@ public class InvoicesController implements Initializable {
         double totalWidth = invoicesTable.getWidth();
         if (totalWidth <= 0) return;
 
-        double actionsWidth = 300;
+        double actionsWidth = 280;
         double availableWidth = totalWidth - actionsWidth;
 
         TableColumn<?, ?>[] columns = invoicesTable.getColumns().toArray(new TableColumn[0]);
 
-        columns[0].setPrefWidth(availableWidth * 0.25); // Invoice Number
-        columns[1].setPrefWidth(availableWidth * 0.20); // Total Amount
-        columns[2].setPrefWidth(availableWidth * 0.20); // Balance Owing
-        columns[3].setPrefWidth(availableWidth * 0.15); // Payment
+        columns[0].setPrefWidth(availableWidth * 0.20); // Invoice Number
+        columns[1].setPrefWidth(availableWidth * 0.10); // Total Amount
+        columns[2].setPrefWidth(availableWidth * 0.13); // Balance Owing
+        columns[3].setPrefWidth(availableWidth * 0.13); // View Payments button
 
         columns[4].setPrefWidth(actionsWidth);
         columns[4].setMinWidth(actionsWidth);
@@ -258,7 +263,7 @@ public class InvoicesController implements Initializable {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new javafx.geometry.Insets(20, 10, 10, 10));
+        grid.setPadding(new Insets(20, 10, 10, 10));
 
         TextField numberField = new TextField();
         TextField totalField = new TextField();
@@ -333,7 +338,7 @@ public class InvoicesController implements Initializable {
         dialog.getDialogPane().getButtonTypes().add(closeButtonType);
 
         VBox vbox = new VBox(10);
-        vbox.setPadding(new javafx.geometry.Insets(20, 10, 10, 10));
+        vbox.setPadding(new Insets(20, 10, 10, 10));
 
         Label totalLabel = new Label("Total: $" + String.format("%.2f", invoice.total()));
         Label balanceLabel = new Label("Balance: $" + String.format("%.2f", invoice.getBalance()));
@@ -343,7 +348,7 @@ public class InvoicesController implements Initializable {
 
         TableColumn<Payment, String> dateCol = new TableColumn<>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
-        dateCol.setPrefWidth(150);
+        dateCol.setPrefWidth(80);
 
         TableColumn<Payment, Double> amountCol = getPaymentDoubleTableColumn();
 
@@ -363,7 +368,7 @@ public class InvoicesController implements Initializable {
 
     private TableColumn<Payment, Void> getPaymentVoidTableColumn(Invoice invoice) {
         TableColumn<Payment, Void> actionsCol = new TableColumn<>("Actions");
-        actionsCol.setPrefWidth(150);
+        actionsCol.setPrefWidth(100);
         actionsCol.setCellFactory(col -> new TableCell<>() {
             private final Button editBtn = new Button("Edit");
             private final Button deleteBtn = new Button("Delete");
@@ -412,7 +417,7 @@ public class InvoicesController implements Initializable {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new javafx.geometry.Insets(20, 10, 10, 10));
+        grid.setPadding(new Insets(20, 10, 10, 10));
 
         DatePicker datePicker = new DatePicker();
         datePicker.setValue(LocalDate.parse(payment.getDate()));
@@ -475,7 +480,7 @@ public class InvoicesController implements Initializable {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new javafx.geometry.Insets(20, 10, 10, 10));
+        grid.setPadding(new Insets(20, 10, 10, 10));
 
         DatePicker datePicker = new DatePicker();
         datePicker.setValue(LocalDate.now());

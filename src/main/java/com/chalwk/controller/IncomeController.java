@@ -1,3 +1,7 @@
+// JCBudgetBuddy
+// Copyright (c) 2025 Jericho Crosby (Chalwk)
+// Licensed under the MIT License.
+
 package com.chalwk.controller;
 
 import com.chalwk.model.IncomeStream;
@@ -28,7 +32,6 @@ public class IncomeController implements Initializable {
     private static TableColumn<IncomeStream, LocalDate> getIncomeStreamLocalDateTableColumn() {
         TableColumn<IncomeStream, LocalDate> startDateCol = new TableColumn<>("Start Date");
         startDateCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-        startDateCol.setPrefWidth(80);
         startDateCol.setCellFactory(col -> new TableCell<IncomeStream, LocalDate>() {
             @Override
             protected void updateItem(LocalDate date, boolean empty) {
@@ -46,7 +49,6 @@ public class IncomeController implements Initializable {
     private static TableColumn<IncomeStream, Double> getIncomeStreamDoubleTableColumn() {
         TableColumn<IncomeStream, Double> amountCol = new TableColumn<>("Amount");
         amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        amountCol.setPrefWidth(80);
         amountCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Double amount, boolean empty) {
@@ -63,7 +65,6 @@ public class IncomeController implements Initializable {
 
     private static TableColumn<IncomeStream, String> getIncomeStreamStringTableColumn() {
         TableColumn<IncomeStream, String> statusCol = new TableColumn<>("Status");
-        statusCol.setPrefWidth(80);
         statusCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -88,7 +89,6 @@ public class IncomeController implements Initializable {
     private static TableColumn<IncomeStream, LocalDate> getStreamLocalDateTableColumn() {
         TableColumn<IncomeStream, LocalDate> endDateCol = new TableColumn<>("End Date");
         endDateCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-        endDateCol.setPrefWidth(100);
         endDateCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(LocalDate date, boolean empty) {
@@ -111,6 +111,7 @@ public class IncomeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setupIncomeStreamsTable();
         setupEventHandlers();
+        setupColumnResizing();
     }
 
     public void setUserData(UserData userData) {
@@ -128,13 +129,11 @@ public class IncomeController implements Initializable {
 
         TableColumn<IncomeStream, String> nameCol = new TableColumn<>("Name");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        nameCol.setPrefWidth(150);
 
         TableColumn<IncomeStream, Double> amountCol = getIncomeStreamDoubleTableColumn();
 
         TableColumn<IncomeStream, String> frequencyCol = new TableColumn<>("Frequency");
         frequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
-        frequencyCol.setPrefWidth(80);
 
         TableColumn<IncomeStream, LocalDate> startDateCol = getIncomeStreamLocalDateTableColumn();
 
@@ -144,10 +143,8 @@ public class IncomeController implements Initializable {
 
         TableColumn<IncomeStream, String> notesCol = new TableColumn<>("Notes");
         notesCol.setCellValueFactory(new PropertyValueFactory<>("notes"));
-        notesCol.setPrefWidth(200);
 
         TableColumn<IncomeStream, Void> actionsCol = new TableColumn<>("Actions");
-        actionsCol.setPrefWidth(275);
         actionsCol.setCellFactory(col -> new TableCell<>() {
             private final Button editBtn = new Button("Edit");
             private final Button toggleBtn = new Button("Toggle");
@@ -194,6 +191,51 @@ public class IncomeController implements Initializable {
 
     private void setupEventHandlers() {
         addIncomeStreamBtn.setOnAction(e -> showIncomeStreamDialog(null));
+    }
+
+    private void setupColumnResizing() {
+        // Initial adjustment
+        adjustColumnWidths();
+
+        // Listen for table width changes
+        incomeStreamsTable.widthProperty().addListener((obs, oldVal, newVal) -> {
+            adjustColumnWidths();
+        });
+
+        // Also adjust when table becomes visible
+        incomeStreamsTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                adjustColumnWidths();
+            }
+        });
+    }
+
+    private void adjustColumnWidths() {
+        if (incomeStreamsTable.getColumns().isEmpty()) return;
+
+        double totalWidth = incomeStreamsTable.getWidth();
+        if (totalWidth <= 0) return;
+
+        // Reserve fixed space for action buttons (approx 275px for 3 buttons with spacing)
+        double actionsWidth = 275;
+        double availableWidth = totalWidth - actionsWidth;
+
+        // Distribute remaining space among other columns with ratios
+        TableColumn<?, ?>[] columns = incomeStreamsTable.getColumns().toArray(new TableColumn[0]);
+
+        // Set widths based on preferred ratios
+        columns[0].setPrefWidth(availableWidth * 0.20); // Name
+        columns[1].setPrefWidth(availableWidth * 0.10); // Amount
+        columns[2].setPrefWidth(availableWidth * 0.10); // Frequency
+        columns[3].setPrefWidth(availableWidth * 0.15); // Start Date
+        columns[4].setPrefWidth(availableWidth * 0.15); // End Date
+        columns[5].setPrefWidth(availableWidth * 0.10); // Status
+        columns[6].setPrefWidth(availableWidth * 0.20); // Notes
+
+        // Set fixed width for actions column
+        columns[7].setPrefWidth(actionsWidth);
+        columns[7].setMinWidth(actionsWidth);
+        columns[7].setMaxWidth(actionsWidth);
     }
 
     private void refreshTables() {

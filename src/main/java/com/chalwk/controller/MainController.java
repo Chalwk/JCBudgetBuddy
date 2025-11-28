@@ -1,3 +1,7 @@
+// JCBudgetBuddy
+// Copyright (c) 2025 Jericho Crosby (Chalwk)
+// Licensed under the MIT License.
+
 package com.chalwk.controller;
 
 import com.chalwk.model.UserData;

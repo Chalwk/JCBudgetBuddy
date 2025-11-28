@@ -1,9 +1,14 @@
+// JCBudgetBuddy
+// Copyright (c) 2025 Jericho Crosby (Chalwk)
+// Licensed under the MIT License.
+
 package com.chalwk.controller;
 
 import com.chalwk.model.Bill;
 import com.chalwk.model.UserData;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
@@ -158,23 +163,23 @@ public class MonthlyBillsController implements Initializable {
         if (totalWidth <= 0) return;
 
         // Reserve fixed space for action buttons
-        double actionsWidth = 200;
+        double actionsWidth = 230;
         double availableWidth = totalWidth - actionsWidth;
 
+        // Distribute remaining space among other columns with ratios
         TableColumn<?, ?>[] columns = billsTable.getColumns().toArray(new TableColumn[0]);
 
         // Set widths based on preferred ratios
-        columns[0].setPrefWidth(availableWidth * 0.25); // Bill name
-        columns[1].setPrefWidth(availableWidth * 0.12); // Amount
-        columns[2].setPrefWidth(availableWidth * 0.12); // Frequency
+        columns[0].setPrefWidth(availableWidth * 0.20); // Bill name
+        columns[1].setPrefWidth(availableWidth * 0.10); // Amount
+        columns[2].setPrefWidth(availableWidth * 0.08); // Frequency
         columns[3].setPrefWidth(availableWidth * 0.15); // Payment Day
-        columns[4].setPrefWidth(availableWidth * 0.28); // Notes
-        columns[5].setPrefWidth(availableWidth * 0.10); // Payment Method
+        columns[4].setPrefWidth(availableWidth * 0.50); // Notes
 
         // Set fixed width for actions column
-        columns[6].setPrefWidth(actionsWidth);
-        columns[6].setMinWidth(actionsWidth);
-        columns[6].setMaxWidth(actionsWidth);
+        columns[5].setPrefWidth(actionsWidth);
+        columns[5].setMinWidth(actionsWidth);
+        columns[5].setMaxWidth(actionsWidth);
     }
 
     private void refreshTable() {
@@ -193,7 +198,7 @@ public class MonthlyBillsController implements Initializable {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new javafx.geometry.Insets(20, 10, 10, 10));
+        grid.setPadding(new Insets(20, 10, 10, 10));
 
         TextField nameField = new TextField();
         TextField amountField = new TextField();
