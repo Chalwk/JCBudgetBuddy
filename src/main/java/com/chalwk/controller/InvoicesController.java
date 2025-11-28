@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class InvoicesController implements Initializable {
@@ -30,7 +31,7 @@ public class InvoicesController implements Initializable {
         TableColumn<Invoice, Double> totalCol = new TableColumn<>("Total Amount");
         totalCol.setCellValueFactory(new PropertyValueFactory<>("total"));
         totalCol.setPrefWidth(120);
-        totalCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
+        totalCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Double total, boolean empty) {
                 super.updateItem(total, empty);
@@ -47,7 +48,7 @@ public class InvoicesController implements Initializable {
     private static TableColumn<Invoice, Double> getDoubleTableColumn() {
         TableColumn<Invoice, Double> balanceCol = new TableColumn<>("Balance Owing");
         balanceCol.setPrefWidth(120);
-        balanceCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
+        balanceCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Double balance, boolean empty) {
                 super.updateItem(balance, empty);
@@ -67,7 +68,7 @@ public class InvoicesController implements Initializable {
         TableColumn<Payment, Double> amountCol = new TableColumn<>("Amount");
         amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
         amountCol.setPrefWidth(100);
-        amountCol.setCellFactory(col -> new TableCell<Payment, Double>() {
+        amountCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Double amount, boolean empty) {
                 super.updateItem(amount, empty);
@@ -113,7 +114,7 @@ public class InvoicesController implements Initializable {
 
         TableColumn<Invoice, Void> actionsCol = new TableColumn<>("Actions");
         actionsCol.setPrefWidth(200);
-        actionsCol.setCellFactory(col -> new TableCell<Invoice, Void>() {
+        actionsCol.setCellFactory(col -> new TableCell<>() {
             private final Button editBtn = new Button("Edit");
             private final Button deleteBtn = new Button("Delete");
             private final Button addPaymentBtn = new Button("Add Payment");
@@ -170,7 +171,7 @@ public class InvoicesController implements Initializable {
     private TableColumn<Invoice, Void> getInvoiceVoidTableColumn() {
         TableColumn<Invoice, Void> paymentsCol = new TableColumn<>("Payments");
         paymentsCol.setPrefWidth(100);
-        paymentsCol.setCellFactory(col -> new TableCell<Invoice, Void>() {
+        paymentsCol.setCellFactory(col -> new TableCell<>() {
             private final Button viewPaymentsBtn = new Button("View Payments");
 
             {
@@ -204,9 +205,7 @@ public class InvoicesController implements Initializable {
         adjustColumnWidths();
 
         // Listen for table width changes
-        invoicesTable.widthProperty().addListener((obs, oldVal, newVal) -> {
-            adjustColumnWidths();
-        });
+        invoicesTable.widthProperty().addListener((obs, oldVal, newVal) -> adjustColumnWidths());
 
         // Also adjust when table becomes visible
         invoicesTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
@@ -223,7 +222,7 @@ public class InvoicesController implements Initializable {
         if (totalWidth <= 0) return;
 
         // Reserve more space for action buttons (3 buttons need more space)
-        double actionsWidth = 250;
+        double actionsWidth = 300;
         double availableWidth = totalWidth - actionsWidth;
 
         TableColumn<?, ?>[] columns = invoicesTable.getColumns().toArray(new TableColumn[0]);
@@ -347,8 +346,7 @@ public class InvoicesController implements Initializable {
 
         // Add actions column for payments
         TableColumn<Payment, Void> actionsCol = getPaymentVoidTableColumn(invoice);
-
-        paymentsTable.getColumns().addAll(dateCol, amountCol, actionsCol);
+        paymentsTable.getColumns().addAll(Arrays.asList(dateCol, amountCol, actionsCol));
         paymentsTable.getItems().addAll(invoice.getPayments());
 
         vbox.getChildren().addAll(totalLabel, balanceLabel, paymentsTable);
