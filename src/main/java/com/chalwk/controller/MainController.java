@@ -8,6 +8,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -16,6 +18,11 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
+    public VBox income;
+    public VBox weeklyBills;
+    public VBox monthlyBills;
+    public VBox invoices;
+    public GridPane dashboard;
     @FXML
     private TabPane mainTabPane;
     @FXML
@@ -32,7 +39,6 @@ public class MainController implements Initializable {
     private InvoicesController invoicesController;
     @FXML
     private IncomeController incomeController;
-
     private DataManager dataManager;
     private UserData userData;
 

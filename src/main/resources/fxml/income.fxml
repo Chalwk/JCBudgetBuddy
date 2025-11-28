@@ -24,7 +24,7 @@
                 <TableColumn text="Start Date"/>
                 <TableColumn text="End Date"/>
                 <TableColumn text="Status"/>
-                <TableColumn text="Notes" />
+                <TableColumn text="Notes"/>
                 <TableColumn text="Actions"/>
             </columns>
         </TableView>

@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Bill {
     private final int id;
     private final String name;
-    private double amount;
     private final String frequency;
     private final String day;
     private final String notes;
     private final String paymentMethod;
+    private double amount;
 
     @JsonCreator
     public Bill(@JsonProperty("id") int id,

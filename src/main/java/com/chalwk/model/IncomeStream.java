@@ -8,12 +8,12 @@ import java.time.LocalDate;
 public class IncomeStream {
     private final int id;
     private final String name;
-    private double amount;
     private final String frequency;
     private final LocalDate startDate;
     private final LocalDate endDate;
-    private boolean active;
     private final String notes;
+    private double amount;
+    private boolean active;
 
     @JsonCreator
     public IncomeStream(@JsonProperty("id") int id,

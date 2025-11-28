@@ -8,10 +8,10 @@ import java.time.LocalDate;
 public class OneTimePayment {
     private final int id;
     private final String description;
-    private double amount;
     private final LocalDate paymentDate;
     private final String category;
     private final String notes;
+    private double amount;
 
     @JsonCreator
     public OneTimePayment(@JsonProperty("id") int id,
@@ -36,7 +36,9 @@ public class OneTimePayment {
         return description;
     }
 
-    public double getAmount() { return amount; }
+    public double getAmount() {
+        return amount;
+    }
 
     public void setAmount(double amount) {
         this.amount = amount;

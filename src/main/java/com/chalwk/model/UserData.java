@@ -74,6 +74,7 @@ public class UserData {
                 .mapToDouble(IncomeStream::getWeeklyAmount)
                 .sum();
     }
+
     public double getOneTimePaymentsForCurrentMonth() {
         LocalDate now = LocalDate.now();
         LocalDate firstOfMonth = now.withDayOfMonth(1);
