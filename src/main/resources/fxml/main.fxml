@@ -23,7 +23,8 @@
 
     <fx:include fx:id="dashboard" source="dashboard.fxml"/>
 
-    <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: transparent;">
+    <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: transparent;"
+             VBox.vgrow="ALWAYS">
         <Tab fx:id="incomeTab" text="Income">
             <fx:include fx:id="income" source="income.fxml"/>
         </Tab>
@@ -39,7 +40,7 @@
     </TabPane>
 
     <!-- Copyright Notice -->
-    <HBox alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+    <HBox alignment="CENTER" style="-fx-padding: 10 0 0 0;">
         <Label text="© Copyright 2025 JCBudgetBuddy | Jericho Crosby (Chalwk)"
                style="-fx-text-fill: #95a5a6; -fx-font-size: 11px;"/>
     </HBox>

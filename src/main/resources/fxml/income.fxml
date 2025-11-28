@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1"
-      fx:controller="com.chalwk.controller.IncomeController" spacing="15">
+      fx:controller="com.chalwk.controller.IncomeController" spacing="15" VBox.vgrow="ALWAYS">
 
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label text="Income Streams" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
@@ -12,8 +12,8 @@
     </HBox>
 
     <!-- Income Streams Section -->
-    <VBox spacing="10">
-        <TableView fx:id="incomeStreamsTable" VBox.vgrow="ALWAYS" prefHeight="550">
+    <VBox spacing="10" VBox.vgrow="ALWAYS">
+        <TableView fx:id="incomeStreamsTable" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn text="Name"/>
                 <TableColumn text="Amount"/>

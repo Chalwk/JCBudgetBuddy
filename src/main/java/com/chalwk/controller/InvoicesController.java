@@ -247,8 +247,8 @@ public class InvoicesController implements Initializable {
         TextField totalField = new TextField();
 
         if (invoice != null) {
-            numberField.setText(invoice.getNumber());
-            totalField.setText(String.valueOf(invoice.getTotal()));
+            numberField.setText(invoice.number());
+            totalField.setText(String.valueOf(invoice.total()));
         }
 
         grid.add(new Label("Invoice Number:"), 0, 0);
@@ -262,10 +262,10 @@ public class InvoicesController implements Initializable {
             if (dialogButton == saveButtonType) {
                 try {
                     return new Invoice(
-                            invoice != null ? invoice.getId() : generateNewId(),
+                            invoice != null ? invoice.id() : generateNewId(),
                             numberField.getText(),
                             Double.parseDouble(totalField.getText()),
-                            invoice != null ? invoice.getPayments() : null
+                            invoice != null ? invoice.payments() : null
                     );
                 } catch (NumberFormatException e) {
                     showAlert();
@@ -297,7 +297,7 @@ public class InvoicesController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Delete");
         alert.setHeaderText("Delete Invoice");
-        alert.setContentText("Are you sure you want to delete this invoice: " + invoice.getNumber() + "?");
+        alert.setContentText("Are you sure you want to delete this invoice: " + invoice.number() + "?");
 
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
@@ -310,7 +310,7 @@ public class InvoicesController implements Initializable {
 
     private void viewPayments(Invoice invoice) {
         Dialog<Void> dialog = new Dialog<>();
-        dialog.setTitle("Payments for Invoice " + invoice.getNumber());
+        dialog.setTitle("Payments for Invoice " + invoice.number());
 
         ButtonType closeButtonType = new ButtonType("Close", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().add(closeButtonType);
@@ -318,7 +318,7 @@ public class InvoicesController implements Initializable {
         VBox vbox = new VBox(10);
         vbox.setPadding(new javafx.geometry.Insets(20, 10, 10, 10));
 
-        Label totalLabel = new Label("Total: $" + String.format("%.2f", invoice.getTotal()));
+        Label totalLabel = new Label("Total: $" + String.format("%.2f", invoice.total()));
         Label balanceLabel = new Label("Balance: $" + String.format("%.2f", invoice.getBalance()));
 
         TableView<Payment> paymentsTable = new TableView<>();
@@ -333,7 +333,7 @@ public class InvoicesController implements Initializable {
         // Add actions column for payments
         TableColumn<Payment, Void> actionsCol = getPaymentVoidTableColumn(invoice);
         paymentsTable.getColumns().addAll(Arrays.asList(dateCol, amountCol, actionsCol));
-        paymentsTable.getItems().addAll(invoice.getPayments());
+        paymentsTable.getItems().addAll(invoice.payments());
 
         vbox.getChildren().addAll(totalLabel, balanceLabel, paymentsTable);
         dialog.getDialogPane().setContent(vbox);
@@ -382,7 +382,7 @@ public class InvoicesController implements Initializable {
     }
 
     private void refreshPaymentsTable(TableView<Payment> paymentsTable, Invoice invoice) {
-        paymentsTable.getItems().setAll(invoice.getPayments());
+        paymentsTable.getItems().setAll(invoice.payments());
     }
 
     private void editPayment(Invoice invoice, Payment payment) {
@@ -424,9 +424,9 @@ public class InvoicesController implements Initializable {
         });
 
         dialog.showAndWait().ifPresent(updatedPayment -> {
-            int paymentIndex = invoice.getPayments().indexOf(payment);
+            int paymentIndex = invoice.payments().indexOf(payment);
             if (paymentIndex != -1) {
-                invoice.getPayments().set(paymentIndex, updatedPayment);
+                invoice.payments().set(paymentIndex, updatedPayment);
                 refreshTable();
                 mainController.saveUserData();
             }
@@ -441,7 +441,7 @@ public class InvoicesController implements Initializable {
 
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                invoice.getPayments().remove(payment);
+                invoice.payments().remove(payment);
                 refreshTable();
                 mainController.saveUserData();
             }
@@ -450,7 +450,7 @@ public class InvoicesController implements Initializable {
 
     private void addPayment(Invoice invoice) {
         Dialog<Payment> dialog = new Dialog<>();
-        dialog.setTitle("Add Payment for Invoice " + invoice.getNumber());
+        dialog.setTitle("Add Payment for Invoice " + invoice.number());
 
         ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
@@ -487,7 +487,7 @@ public class InvoicesController implements Initializable {
         });
 
         dialog.showAndWait().ifPresent(payment -> {
-            invoice.getPayments().add(payment);
+            invoice.payments().add(payment);
             refreshTable();
             mainController.saveUserData();
         });
@@ -495,7 +495,7 @@ public class InvoicesController implements Initializable {
 
     private int generateNewId() {
         return userData.getInvoices().stream()
-                .mapToInt(Invoice::getId)
+                .mapToInt(Invoice::id)
                 .max()
                 .orElse(0) + 1;
     }
