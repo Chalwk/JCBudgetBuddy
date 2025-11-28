@@ -39,4 +39,5 @@ The built installer will be available in the `build/jpackage` directory.
 - Java 21 Runtime (included in installer)
 
 ### [LICENSE](LICENSE)
+
 Licensed under the [MIT License](LICENSE).
