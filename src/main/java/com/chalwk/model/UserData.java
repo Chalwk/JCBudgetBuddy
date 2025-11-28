@@ -12,7 +12,6 @@ public class UserData {
     private final List<Bill> monthlyBills;
     private final List<Invoice> invoices;
     private final List<IncomeStream> incomeStreams;
-    private final List<OneTimePayment> oneTimePayments;
 
     // Keep for backward compatibility, but deprecate
     private double weeklyIncome;
@@ -22,13 +21,11 @@ public class UserData {
                     @JsonProperty("monthlyBills") List<Bill> monthlyBills,
                     @JsonProperty("invoices") List<Invoice> invoices,
                     @JsonProperty("incomeStreams") List<IncomeStream> incomeStreams,
-                    @JsonProperty("oneTimePayments") List<OneTimePayment> oneTimePayments,
                     @JsonProperty("weeklyIncome") double weeklyIncome) {
         this.weeklyBills = weeklyBills != null ? weeklyBills : new ArrayList<>();
         this.monthlyBills = monthlyBills != null ? monthlyBills : new ArrayList<>();
         this.invoices = invoices != null ? invoices : new ArrayList<>();
         this.incomeStreams = incomeStreams != null ? incomeStreams : new ArrayList<>();
-        this.oneTimePayments = oneTimePayments != null ? oneTimePayments : new ArrayList<>();
         this.weeklyIncome = weeklyIncome;
 
         if (this.incomeStreams.isEmpty() && weeklyIncome > 0) {
@@ -54,10 +51,6 @@ public class UserData {
         return incomeStreams;
     }
 
-    public List<OneTimePayment> getOneTimePayments() {
-        return oneTimePayments;
-    }
-
     @Deprecated
     public double getWeeklyIncome() {
         return weeklyIncome;
@@ -72,18 +65,6 @@ public class UserData {
         return incomeStreams.stream()
                 .filter(IncomeStream::isActive)
                 .mapToDouble(IncomeStream::getWeeklyAmount)
-                .sum();
-    }
-
-    public double getOneTimePaymentsForCurrentMonth() {
-        LocalDate now = LocalDate.now();
-        LocalDate firstOfMonth = now.withDayOfMonth(1);
-        LocalDate lastOfMonth = now.withDayOfMonth(now.lengthOfMonth());
-
-        return oneTimePayments.stream()
-                .filter(payment -> !payment.getPaymentDate().isBefore(firstOfMonth) &&
-                        !payment.getPaymentDate().isAfter(lastOfMonth))
-                .mapToDouble(OneTimePayment::getAmount)
                 .sum();
     }
 }
