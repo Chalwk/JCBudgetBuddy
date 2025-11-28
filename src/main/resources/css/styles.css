@@ -61,7 +61,6 @@
     -fx-background-color: #c0392b;
 }
 
-/* Specific button sizes */
 .button[text="Edit"] {
     -fx-min-width: 70px;
 }
@@ -88,14 +87,12 @@
     -fx-min-width: 90px;
 }
 
-/* Table button styling for action columns */
 .table-button {
     -fx-min-width: 80px;
     -fx-font-size: 12px;
     -fx-padding: 4 8;
 }
 
-/* Table row hover effect */
 .table-row-cell:hover {
     -fx-background-color: #f5f5f5;
 }
@@ -105,25 +102,21 @@
     -fx-text-fill: white;
 }
 
-/* Additional styles to prevent text truncation in labels */
 .label {
     -fx-text-overrun: clip;
 }
 
-/* Ensure table cells don't truncate text unnecessarily */
 .table-cell {
     -fx-text-overrun: clip;
     -fx-padding: 5px;
 }
 
-/* Card styling for dashboard */
 .card {
     -fx-background-color: white;
     -fx-background-radius: 8;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 4);
 }
 
-/* Tab pane styling */
 .tab-pane {
     -fx-background-color: transparent;
 }
@@ -146,7 +139,6 @@
     -fx-font-weight: bold;
 }
 
-/* Prevent text truncation in buttons by setting min width based on content */
 .button {
     -fx-content-display: CENTER;
 }

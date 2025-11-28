@@ -84,11 +84,8 @@ public class DashboardController implements Initializable {
         weeklyExpensesLabel.setText(String.format("$%.2f", totalWeeklyExpenses));
         remainingBalanceLabel.setText(String.format("$%.2f", remainingBalance));
         monthlyAverageLabel.setText(String.format("$%.2f", monthlyAverage));
-
-        // Update income streams count
         incomeStreamsCountLabel.setText("From " + activeStreamsCount + " active income streams");
 
-        // Set color based on balance
         if (remainingBalance >= 0) {
             remainingBalanceLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2ecc71;");
         } else {

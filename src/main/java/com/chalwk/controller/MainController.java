@@ -51,7 +51,6 @@ public class MainController implements Initializable {
         dataManager = DataManager.getInstance();
         loadUserData();
 
-        // Initialize included controllers
         if (dashboardController != null) {
             dashboardController.setUserData(userData);
             dashboardController.setMainController(this);

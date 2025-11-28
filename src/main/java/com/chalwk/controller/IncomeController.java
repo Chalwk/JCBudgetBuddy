@@ -194,15 +194,10 @@ public class IncomeController implements Initializable {
     }
 
     private void setupColumnResizing() {
-        // Initial adjustment
         adjustColumnWidths();
-
-        // Listen for table width changes
         incomeStreamsTable.widthProperty().addListener((obs, oldVal, newVal) -> {
             adjustColumnWidths();
         });
-
-        // Also adjust when table becomes visible
         incomeStreamsTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 adjustColumnWidths();
@@ -216,14 +211,11 @@ public class IncomeController implements Initializable {
         double totalWidth = incomeStreamsTable.getWidth();
         if (totalWidth <= 0) return;
 
-        // Reserve fixed space for action buttons (approx 275px for 3 buttons with spacing)
         double actionsWidth = 275;
         double availableWidth = totalWidth - actionsWidth;
 
-        // Distribute remaining space among other columns with ratios
         TableColumn<?, ?>[] columns = incomeStreamsTable.getColumns().toArray(new TableColumn[0]);
 
-        // Set widths based on preferred ratios
         columns[0].setPrefWidth(availableWidth * 0.20); // Name
         columns[1].setPrefWidth(availableWidth * 0.10); // Amount
         columns[2].setPrefWidth(availableWidth * 0.10); // Frequency
@@ -232,7 +224,6 @@ public class IncomeController implements Initializable {
         columns[5].setPrefWidth(availableWidth * 0.10); // Status
         columns[6].setPrefWidth(availableWidth * 0.20); // Notes
 
-        // Set fixed width for actions column
         columns[7].setPrefWidth(actionsWidth);
         columns[7].setMinWidth(actionsWidth);
         columns[7].setMaxWidth(actionsWidth);
@@ -269,22 +260,16 @@ public class IncomeController implements Initializable {
         startDatePicker.setValue(LocalDate.now());
         activeCheckbox.setSelected(true);
 
-        // Set up listener to handle one-off frequency changes
         frequencyCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
             boolean isOneOff = "one-off".equals(newVal);
 
-            // Disable start/end date fields for one-off payments
             startDatePicker.setDisable(isOneOff);
             endDatePicker.setDisable(isOneOff);
-
-            // Disable active checkbox for one-off payments (managed automatically)
             activeCheckbox.setDisable(isOneOff);
 
             if (isOneOff) {
-                // Set default values for one-off payments
                 startDatePicker.setValue(LocalDate.now());
                 endDatePicker.setValue(null);
-                // Active status will be managed automatically based on amount
                 activeCheckbox.setSelected(true);
             }
         });
@@ -303,19 +288,16 @@ public class IncomeController implements Initializable {
                 }
                 activeCheckbox.setSelected(stream.isActive());
             } else {
-                // For one-off, use current date and disable fields
                 startDatePicker.setValue(LocalDate.now());
                 startDatePicker.setDisable(true);
                 endDatePicker.setDisable(true);
                 activeCheckbox.setDisable(true);
-                // Active status is managed automatically for one-off
                 activeCheckbox.setSelected(stream.getAmount() > 0);
             }
 
             notesField.setText(stream.getNotes());
         }
 
-        // Set initial state based on current frequency
         boolean initialIsOneOff = "one-off".equals(frequencyCombo.getValue());
         startDatePicker.setDisable(initialIsOneOff);
         endDatePicker.setDisable(initialIsOneOff);
@@ -343,11 +325,8 @@ public class IncomeController implements Initializable {
                 try {
                     String frequency = frequencyCombo.getValue();
                     boolean isOneOff = "one-off".equals(frequency);
-
-                    // For one-off payments, active status is determined by amount
                     boolean active = isOneOff ? (Double.parseDouble(amountField.getText()) > 0) : activeCheckbox.isSelected();
 
-                    // For one-off payments, use current date as start date and no end date
                     LocalDate startDate = isOneOff ? LocalDate.now() : startDatePicker.getValue();
                     LocalDate endDate = isOneOff ? null : endDatePicker.getValue();
 

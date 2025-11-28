@@ -171,8 +171,6 @@ public class InvoicesController implements Initializable {
         });
 
         invoicesTable.getColumns().addAll(numberCol, totalCol, balanceCol, paymentsCol, actionsCol);
-
-        // Add double-click handler
         invoicesTable.setRowFactory(tv -> {
             TableRow<Invoice> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -351,16 +349,13 @@ public class InvoicesController implements Initializable {
         dateCol.setPrefWidth(80);
 
         TableColumn<Payment, Double> amountCol = getPaymentDoubleTableColumn();
-
-        // Add actions column for payments
         TableColumn<Payment, Void> actionsCol = getPaymentVoidTableColumn(invoice);
+
         paymentsTable.getColumns().addAll(Arrays.asList(dateCol, amountCol, actionsCol));
         paymentsTable.getItems().addAll(invoice.payments());
 
         vbox.getChildren().addAll(totalLabel, balanceLabel, paymentsTable);
         dialog.getDialogPane().setContent(vbox);
-
-        // Refresh table when dialog is shown
         dialog.setOnShown(e -> refreshPaymentsTable(paymentsTable, invoice));
 
         dialog.showAndWait();

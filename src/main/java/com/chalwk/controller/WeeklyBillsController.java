@@ -62,7 +62,6 @@ public class WeeklyBillsController implements Initializable {
 
     @SuppressWarnings("unchecked")
     private void setupTable() {
-        // Remove all columns first
         billsTable.getColumns().clear();
 
         TableColumn<Bill, String> nameCol = new TableColumn<>("Bill");
@@ -82,8 +81,6 @@ public class WeeklyBillsController implements Initializable {
         TableColumn<Bill, Void> actionsCol = getBillVoidTableColumn();
 
         billsTable.getColumns().addAll(nameCol, amountCol, frequencyCol, dayCol, notesCol, actionsCol);
-
-        // Add double-click handler
         billsTable.setRowFactory(tv -> {
             TableRow<Bill> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -138,15 +135,10 @@ public class WeeklyBillsController implements Initializable {
     }
 
     private void setupColumnResizing() {
-        // Initial adjustment
         adjustColumnWidths();
-
-        // Listen for table width changes
         billsTable.widthProperty().addListener((obs, oldVal, newVal) -> {
             adjustColumnWidths();
         });
-
-        // Also adjust when table becomes visible
         billsTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 adjustColumnWidths();
@@ -160,21 +152,17 @@ public class WeeklyBillsController implements Initializable {
         double totalWidth = billsTable.getWidth();
         if (totalWidth <= 0) return;
 
-        // Reserve fixed space for action buttons
         double actionsWidth = 230;
         double availableWidth = totalWidth - actionsWidth;
 
-        // Distribute remaining space among other columns with ratios
         TableColumn<?, ?>[] columns = billsTable.getColumns().toArray(new TableColumn[0]);
 
-        // Set widths based on preferred ratios
         columns[0].setPrefWidth(availableWidth * 0.20); // Bill name
         columns[1].setPrefWidth(availableWidth * 0.10); // Amount
         columns[2].setPrefWidth(availableWidth * 0.08); // Frequency
         columns[3].setPrefWidth(availableWidth * 0.15); // Payment Day
         columns[4].setPrefWidth(availableWidth * 0.50); // Notes
 
-        // Set fixed width for actions column
         columns[5].setPrefWidth(actionsWidth);
         columns[5].setMinWidth(actionsWidth);
         columns[5].setMaxWidth(actionsWidth);
@@ -204,7 +192,6 @@ public class WeeklyBillsController implements Initializable {
         TextField dayField = new TextField();
         TextField notesField = new TextField();
 
-        // Update frequency options to include Bi-Weekly
         frequencyCombo.getItems().addAll("Weekly", "Bi-Weekly", "Monthly");
         frequencyCombo.setValue("Weekly");
 

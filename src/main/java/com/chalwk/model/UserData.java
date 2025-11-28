@@ -15,8 +15,6 @@ public class UserData {
     private final List<Bill> monthlyBills;
     private final List<Invoice> invoices;
     private final List<IncomeStream> incomeStreams;
-
-    // Keep for backward compatibility, but deprecate
     private double weeklyIncome;
 
     @JsonCreator
