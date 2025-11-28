@@ -52,6 +52,52 @@ public class InvoicesController implements Initializable {
         return amountCol;
     }
 
+    private static TableColumn<Invoice, Double> getDoubleTableColumn() {
+        TableColumn<Invoice, Double> balanceCol = new TableColumn<>("Balance Owing");
+        balanceCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
+            @Override
+            protected void updateItem(Double balance, boolean empty) {
+                super.updateItem(balance, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    Invoice invoice = getTableView().getItems().get(getIndex());
+                    double bal = invoice.getBalance();
+                    setText(String.format("$%.2f", bal));
+
+                    // Color coding for balance
+                    if (bal == 0) {
+                        setTextFill(Color.GREEN);
+                    } else if (bal > 0) {
+                        setTextFill(Color.ORANGE);
+                    } else {
+                        setTextFill(Color.RED);
+                    }
+                }
+            }
+        });
+        balanceCol.setPrefWidth(100);
+        return balanceCol;
+    }
+
+    private static TableColumn<Invoice, Double> getInvoiceDoubleTableColumn() {
+        TableColumn<Invoice, Double> totalCol = new TableColumn<>("Total Amount");
+        totalCol.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().total()).asObject());
+        totalCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
+            @Override
+            protected void updateItem(Double total, boolean empty) {
+                super.updateItem(total, empty);
+                if (empty || total == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("$%.2f", total));
+                }
+            }
+        });
+        totalCol.setPrefWidth(100);
+        return totalCol;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupTable();
@@ -137,52 +183,6 @@ public class InvoicesController implements Initializable {
             });
             return row;
         });
-    }
-
-    private static TableColumn<Invoice, Double> getDoubleTableColumn() {
-        TableColumn<Invoice, Double> balanceCol = new TableColumn<>("Balance Owing");
-        balanceCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
-            @Override
-            protected void updateItem(Double balance, boolean empty) {
-                super.updateItem(balance, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    Invoice invoice = getTableView().getItems().get(getIndex());
-                    double bal = invoice.getBalance();
-                    setText(String.format("$%.2f", bal));
-
-                    // Color coding for balance
-                    if (bal == 0) {
-                        setTextFill(Color.GREEN);
-                    } else if (bal > 0) {
-                        setTextFill(Color.ORANGE);
-                    } else {
-                        setTextFill(Color.RED);
-                    }
-                }
-            }
-        });
-        balanceCol.setPrefWidth(100);
-        return balanceCol;
-    }
-
-    private static TableColumn<Invoice, Double> getInvoiceDoubleTableColumn() {
-        TableColumn<Invoice, Double> totalCol = new TableColumn<>("Total Amount");
-        totalCol.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().total()).asObject());
-        totalCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
-            @Override
-            protected void updateItem(Double total, boolean empty) {
-                super.updateItem(total, empty);
-                if (empty || total == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("$%.2f", total));
-                }
-            }
-        });
-        totalCol.setPrefWidth(100);
-        return totalCol;
     }
 
     private TableColumn<Invoice, Void> getInvoiceVoidTableColumn() {

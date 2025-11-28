@@ -83,8 +83,8 @@ public class IncomeStream {
 
         return switch (frequency) {
             case "fortnightly" -> amount / 2;
-            case "monthly" -> amount / 4.33; // Average weeks per month
-            case "one-off" -> 0.0; // One-off payments are handled separately
+            case "monthly" -> amount / 4.33;
+            case "yearly" -> amount / 52;
             default -> amount;
         };
     }

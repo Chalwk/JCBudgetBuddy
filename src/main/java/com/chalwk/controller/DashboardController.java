@@ -58,6 +58,7 @@ public class DashboardController implements Initializable {
         long activeStreamsCount = userData.getIncomeStreams().stream()
                 .filter(IncomeStream::isActive)
                 .count();
+
         double weeklyExpensesFromWeeklyBills = userData.getWeeklyBills().stream()
                 .mapToDouble(bill -> switch (bill.getFrequency()) {
                     case "Bi-Weekly" -> bill.getAmount() / 2;
@@ -65,11 +66,12 @@ public class DashboardController implements Initializable {
                     default -> bill.getAmount();
                 })
                 .sum();
+
         double weeklyExpensesFromMonthlyBills = userData.getMonthlyBills().stream()
                 .filter(bill -> "automatic".equals(bill.getPaymentMethod()))
                 .mapToDouble(bill -> switch (bill.getFrequency()) {
                     case "Weekly" -> bill.getAmount();
-                    case "Bi-Weekly" -> bill.getAmount() / 2; // Half the amount per week
+                    case "Bi-Weekly" -> bill.getAmount() / 2;
                     default -> bill.getAmount() / 4;
                 })
                 .sum();

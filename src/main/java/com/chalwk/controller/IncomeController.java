@@ -264,7 +264,7 @@ public class IncomeController implements Initializable {
         CheckBox activeCheckbox = new CheckBox("Active");
         TextField notesField = new TextField();
 
-        frequencyCombo.getItems().addAll("weekly", "fortnightly", "monthly");
+        frequencyCombo.getItems().addAll("weekly", "fortnightly", "monthly", "yearly", "one-off");
         frequencyCombo.setValue("weekly");
         startDatePicker.setValue(LocalDate.now());
         activeCheckbox.setSelected(true);
