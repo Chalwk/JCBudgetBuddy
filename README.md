@@ -11,6 +11,30 @@ A personal finance tracker built with JavaFX for managing weekly and monthly exp
 - **Import/Export** - Backup and restore your financial data
 - **Windows Installer** - Easy deployment with native Windows executable
 
+---
+
+## Installation
+
+1. **Run the installer** - Double-click the `JCBudgetBuddy.exe` file
+2. **Security prompt** - If you see "Windows protected your PC":
+    - Click "More info"
+    - Click "Run anyway"
+3. **Installation wizard**:
+    - Click "Next" to begin
+    - Accept the license agreement
+    - Choose installation directory (default: `C:\Program Files\JCBudgetBuddy\`)
+    - Click "Install"
+4. **Permissions** - Allow permissions when prompted by the installer
+5. **Completion** - Click "Finish" to complete installation
+
+**Note**: If the installer doesn't open after the first attempt (a rare Windows 10 issue), simply run the executable again.
+
+After installation, you can launch JCBudgetBuddy from:
+- Desktop shortcut
+- Start menu (search for "JCBudgetBuddy")
+
+---
+
 ## Building from Source
 
 ### Prerequisites
@@ -32,11 +56,6 @@ gradle jpackage
 ```
 
 The built installer will be available in the `build/jpackage` directory.
-
-## System Requirements
-
-- Windows 10/11
-- Java 21 Runtime (included in installer)
 
 ### [LICENSE](LICENSE)
 
