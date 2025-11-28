@@ -17,7 +17,9 @@ public class FileUtil {
     public static void ensureDataDirectoryExists() {
         File directory = new File(getUserDataDirectory());
         if (!directory.exists()) {
-            directory.mkdirs();
+            if (!directory.mkdirs()) {
+                throw new IllegalStateException("Could not create data directory: " + directory.getAbsolutePath());
+            }
         }
     }
 }

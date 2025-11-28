@@ -1,17 +1,17 @@
 package com.chalwk.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Invoice {
-    private int id;
-    private String number;
-    private double total;
-    private List<Payment> payments;
+    private final int id;
+    private final String number;
+    private final double total;
+    private final List<Payment> payments;
 
     @JsonCreator
     public Invoice(@JsonProperty("id") int id,
@@ -29,32 +29,16 @@ public class Invoice {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getNumber() {
         return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
     }
 
     public double getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
     public List<Payment> getPayments() {
         return payments;
-    }
-
-    public void setPayments(List<Payment> payments) {
-        this.payments = payments;
     }
 
     @JsonIgnore

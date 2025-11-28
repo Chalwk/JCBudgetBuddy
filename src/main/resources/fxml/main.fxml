@@ -25,6 +25,9 @@
 
     <TabPane fx:id="mainTabPane" tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: transparent;">
         <tabs>
+            <Tab fx:id="incomeTab" text="Income">
+                <fx:include fx:id="income" source="income.fxml"/>
+            </Tab>
             <Tab text="Weekly Bills">
                 <fx:include fx:id="weeklyBills" source="weeklybills.fxml"/>
             </Tab>

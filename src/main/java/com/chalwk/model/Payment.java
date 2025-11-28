@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Payment {
-    private String date;
+    private final String date;
     private double amount;
 
     @JsonCreator
@@ -14,13 +14,8 @@ public class Payment {
         this.amount = amount;
     }
 
-    // Getters and setters
     public String getDate() {
         return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public double getAmount() {

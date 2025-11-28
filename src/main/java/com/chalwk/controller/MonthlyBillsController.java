@@ -25,7 +25,6 @@ public class MonthlyBillsController implements Initializable {
     private static TableColumn<Bill, Double> getBillDoubleTableColumn() {
         TableColumn<Bill, Double> amountCol = new TableColumn<>("Amount");
         amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        amountCol.setPrefWidth(100);
         amountCol.setCellFactory(col -> new TableCell<Bill, Double>() {
             @Override
             protected void updateItem(Double amount, boolean empty) {
@@ -62,25 +61,20 @@ public class MonthlyBillsController implements Initializable {
 
         TableColumn<Bill, String> nameCol = new TableColumn<>("Bill");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        nameCol.setPrefWidth(200);
 
         TableColumn<Bill, Double> amountCol = getBillDoubleTableColumn();
 
         TableColumn<Bill, String> frequencyCol = new TableColumn<>("Frequency");
         frequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
-        frequencyCol.setPrefWidth(100);
 
         TableColumn<Bill, String> dayCol = new TableColumn<>("Payment Day");
         dayCol.setCellValueFactory(new PropertyValueFactory<>("day"));
-        dayCol.setPrefWidth(150);
 
         TableColumn<Bill, String> notesCol = new TableColumn<>("Additional Notes");
         notesCol.setCellValueFactory(new PropertyValueFactory<>("notes"));
-        notesCol.setPrefWidth(250);
 
         TableColumn<Bill, String> paymentMethodCol = new TableColumn<>("Payment Method");
         paymentMethodCol.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
-        paymentMethodCol.setPrefWidth(150);
 
         TableColumn<Bill, Void> actionsCol = getBillVoidTableColumn();
 
@@ -101,7 +95,6 @@ public class MonthlyBillsController implements Initializable {
 
     private TableColumn<Bill, Void> getBillVoidTableColumn() {
         TableColumn<Bill, Void> actionsCol = new TableColumn<>("Actions");
-        actionsCol.setPrefWidth(150);
         actionsCol.setCellFactory(col -> new TableCell<Bill, Void>() {
             private final Button editBtn = new Button("Edit");
             private final Button deleteBtn = new Button("Delete");
@@ -171,12 +164,12 @@ public class MonthlyBillsController implements Initializable {
         TableColumn<?, ?>[] columns = billsTable.getColumns().toArray(new TableColumn[0]);
 
         // Set widths based on preferred ratios
-        columns[0].setPrefWidth(availableWidth * 0.25); // Bill name (25%)
-        columns[1].setPrefWidth(availableWidth * 0.12); // Amount (12%)
-        columns[2].setPrefWidth(availableWidth * 0.12); // Frequency (12%)
-        columns[3].setPrefWidth(availableWidth * 0.15); // Payment Day (15%)
-        columns[4].setPrefWidth(availableWidth * 0.18); // Notes (18%)
-        columns[5].setPrefWidth(availableWidth * 0.18); // Payment Method (18%)
+        columns[0].setPrefWidth(availableWidth * 0.25); // Bill name
+        columns[1].setPrefWidth(availableWidth * 0.12); // Amount
+        columns[2].setPrefWidth(availableWidth * 0.12); // Frequency
+        columns[3].setPrefWidth(availableWidth * 0.15); // Payment Day
+        columns[4].setPrefWidth(availableWidth * 0.18); // Notes
+        columns[5].setPrefWidth(availableWidth * 0.10); // Payment Method
 
         // Set fixed width for actions column
         columns[6].setPrefWidth(actionsWidth);

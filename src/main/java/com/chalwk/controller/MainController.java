@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.FileChooser;
 
@@ -19,8 +20,8 @@ public class MainController implements Initializable {
     private TabPane mainTabPane;
     @FXML
     private Button exportBtn, importBtn;
-
-    // Included controllers
+    @FXML
+    private Tab incomeTab;
     @FXML
     private DashboardController dashboardController;
     @FXML
@@ -29,6 +30,8 @@ public class MainController implements Initializable {
     private MonthlyBillsController monthlyBillsController;
     @FXML
     private InvoicesController invoicesController;
+    @FXML
+    private IncomeController incomeController;
 
     private DataManager dataManager;
     private UserData userData;
@@ -41,6 +44,7 @@ public class MainController implements Initializable {
         // Initialize included controllers
         if (dashboardController != null) {
             dashboardController.setUserData(userData);
+            dashboardController.setMainController(this);
         }
         if (weeklyBillsController != null) {
             weeklyBillsController.setUserData(userData);
@@ -53,6 +57,10 @@ public class MainController implements Initializable {
         if (invoicesController != null) {
             invoicesController.setUserData(userData);
             invoicesController.setMainController(this);
+        }
+        if (incomeController != null) {
+            incomeController.setUserData(userData);
+            incomeController.setMainController(this);
         }
 
         setupEventHandlers();
@@ -111,6 +119,15 @@ public class MainController implements Initializable {
         if (dashboardController != null) {
             dashboardController.updateCalculations();
         }
+        if (incomeController != null) {
+            incomeController.setUserData(userData);
+        }
+    }
+
+    public void openIncomeTab() {
+        if (incomeTab != null && mainTabPane != null) {
+            mainTabPane.getSelectionModel().select(incomeTab);
+        }
     }
 
     private void updateAllControllers() {
@@ -118,6 +135,7 @@ public class MainController implements Initializable {
         if (weeklyBillsController != null) weeklyBillsController.setUserData(userData);
         if (monthlyBillsController != null) monthlyBillsController.setUserData(userData);
         if (invoicesController != null) invoicesController.setUserData(userData);
+        if (incomeController != null) incomeController.setUserData(userData);
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {

@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Bill {
-    private int id;
-    private String name;
+    private final int id;
+    private final String name;
     private double amount;
-    private String frequency;
-    private String day;
-    private String notes;
-    private String paymentMethod;
+    private final String frequency;
+    private final String day;
+    private final String notes;
+    private final String paymentMethod;
 
     @JsonCreator
     public Bill(@JsonProperty("id") int id,
@@ -29,21 +29,12 @@ public class Bill {
         this.paymentMethod = paymentMethod;
     }
 
-    // Getters and setters
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public double getAmount() {
@@ -58,31 +49,15 @@ public class Bill {
         return frequency;
     }
 
-    public void setFrequency(String frequency) {
-        this.frequency = frequency;
-    }
-
     public String getDay() {
         return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
     }
 
     public String getNotes() {
         return notes;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
     public String getPaymentMethod() {
         return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
     }
 }

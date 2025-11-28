@@ -30,7 +30,6 @@ public class InvoicesController implements Initializable {
     private static TableColumn<Invoice, Double> getInvoiceDoubleTableColumn() {
         TableColumn<Invoice, Double> totalCol = new TableColumn<>("Total Amount");
         totalCol.setCellValueFactory(new PropertyValueFactory<>("total"));
-        totalCol.setPrefWidth(120);
         totalCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Double total, boolean empty) {
@@ -47,7 +46,6 @@ public class InvoicesController implements Initializable {
 
     private static TableColumn<Invoice, Double> getDoubleTableColumn() {
         TableColumn<Invoice, Double> balanceCol = new TableColumn<>("Balance Owing");
-        balanceCol.setPrefWidth(120);
         balanceCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Double balance, boolean empty) {
@@ -67,7 +65,6 @@ public class InvoicesController implements Initializable {
     private static TableColumn<Payment, Double> getPaymentDoubleTableColumn() {
         TableColumn<Payment, Double> amountCol = new TableColumn<>("Amount");
         amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        amountCol.setPrefWidth(100);
         amountCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Double amount, boolean empty) {
@@ -104,7 +101,6 @@ public class InvoicesController implements Initializable {
 
         TableColumn<Invoice, String> numberCol = new TableColumn<>("Invoice Number");
         numberCol.setCellValueFactory(new PropertyValueFactory<>("number"));
-        numberCol.setPrefWidth(150);
 
         TableColumn<Invoice, Double> totalCol = getInvoiceDoubleTableColumn();
 
@@ -113,7 +109,6 @@ public class InvoicesController implements Initializable {
         TableColumn<Invoice, Void> paymentsCol = getInvoiceVoidTableColumn();
 
         TableColumn<Invoice, Void> actionsCol = new TableColumn<>("Actions");
-        actionsCol.setPrefWidth(200);
         actionsCol.setCellFactory(col -> new TableCell<>() {
             private final Button editBtn = new Button("Edit");
             private final Button deleteBtn = new Button("Delete");
@@ -170,7 +165,6 @@ public class InvoicesController implements Initializable {
 
     private TableColumn<Invoice, Void> getInvoiceVoidTableColumn() {
         TableColumn<Invoice, Void> paymentsCol = new TableColumn<>("Payments");
-        paymentsCol.setPrefWidth(100);
         paymentsCol.setCellFactory(col -> new TableCell<>() {
             private final Button viewPaymentsBtn = new Button("View Payments");
 
@@ -201,13 +195,8 @@ public class InvoicesController implements Initializable {
     }
 
     private void setupColumnResizing() {
-        // Initial adjustment
         adjustColumnWidths();
-
-        // Listen for table width changes
         invoicesTable.widthProperty().addListener((obs, oldVal, newVal) -> adjustColumnWidths());
-
-        // Also adjust when table becomes visible
         invoicesTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
             if (newScene != null) {
                 adjustColumnWidths();
@@ -221,19 +210,16 @@ public class InvoicesController implements Initializable {
         double totalWidth = invoicesTable.getWidth();
         if (totalWidth <= 0) return;
 
-        // Reserve more space for action buttons (3 buttons need more space)
         double actionsWidth = 300;
         double availableWidth = totalWidth - actionsWidth;
 
         TableColumn<?, ?>[] columns = invoicesTable.getColumns().toArray(new TableColumn[0]);
 
-        // Set widths based on preferred ratios
-        columns[0].setPrefWidth(availableWidth * 0.25); // Invoice Number (25%)
-        columns[1].setPrefWidth(availableWidth * 0.20); // Total Amount (20%)
-        columns[2].setPrefWidth(availableWidth * 0.20); // Balance Owing (20%)
-        columns[3].setPrefWidth(availableWidth * 0.35); // Payments (35%)
+        columns[0].setPrefWidth(availableWidth * 0.25); // Invoice Number
+        columns[1].setPrefWidth(availableWidth * 0.20); // Total Amount
+        columns[2].setPrefWidth(availableWidth * 0.20); // Balance Owing
+        columns[3].setPrefWidth(availableWidth * 0.15); // Payment
 
-        // Set fixed width for actions column
         columns[4].setPrefWidth(actionsWidth);
         columns[4].setMinWidth(actionsWidth);
         columns[4].setMaxWidth(actionsWidth);
