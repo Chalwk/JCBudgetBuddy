@@ -22,10 +22,29 @@ public class WeeklyBillsController implements Initializable {
     private UserData userData;
     private MainController mainController;
 
+    private static TableColumn<Bill, Double> getBillDoubleTableColumn() {
+        TableColumn<Bill, Double> amountCol = new TableColumn<>("Amount");
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        amountCol.setPrefWidth(100);
+        amountCol.setCellFactory(col -> new TableCell<Bill, Double>() {
+            @Override
+            protected void updateItem(Double amount, boolean empty) {
+                super.updateItem(amount, empty);
+                if (empty || amount == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("$%.2f", amount));
+                }
+            }
+        });
+        return amountCol;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupTable();
         setupEventHandlers();
+        setupColumnResizing();
     }
 
     public void setUserData(UserData userData) {
@@ -85,8 +104,8 @@ public class WeeklyBillsController implements Initializable {
             private final Button deleteBtn = new Button("Delete");
 
             {
-                editBtn.getStyleClass().add("warning-button");
-                deleteBtn.getStyleClass().add("danger-button");
+                editBtn.getStyleClass().addAll("warning-button", "table-button");
+                deleteBtn.getStyleClass().addAll("danger-button", "table-button");
 
                 editBtn.setOnAction(e -> {
                     Bill bill = getTableView().getItems().get(getIndex());
@@ -106,6 +125,7 @@ public class WeeklyBillsController implements Initializable {
                     setGraphic(null);
                 } else {
                     HBox buttons = new HBox(5, editBtn, deleteBtn);
+                    buttons.getStyleClass().add("actions-container");
                     setGraphic(buttons);
                 }
             }
@@ -113,27 +133,52 @@ public class WeeklyBillsController implements Initializable {
         return actionsCol;
     }
 
-    private static TableColumn<Bill, Double> getBillDoubleTableColumn() {
-        TableColumn<Bill, Double> amountCol = new TableColumn<>("Amount");
-        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        amountCol.setPrefWidth(100);
-        amountCol.setCellFactory(col -> new TableCell<Bill, Double>() {
-            @Override
-            protected void updateItem(Double amount, boolean empty) {
-                super.updateItem(amount, empty);
-                if (empty || amount == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("$%.2f", amount));
-                }
-            }
-        });
-        return amountCol;
-    }
-
     private void setupEventHandlers() {
         addBillBtn.getStyleClass().add("primary-button");
         addBillBtn.setOnAction(e -> showBillDialog(null));
+    }
+
+    private void setupColumnResizing() {
+        // Initial adjustment
+        adjustColumnWidths();
+
+        // Listen for table width changes
+        billsTable.widthProperty().addListener((obs, oldVal, newVal) -> {
+            adjustColumnWidths();
+        });
+
+        // Also adjust when table becomes visible
+        billsTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                adjustColumnWidths();
+            }
+        });
+    }
+
+    private void adjustColumnWidths() {
+        if (billsTable.getColumns().isEmpty()) return;
+
+        double totalWidth = billsTable.getWidth();
+        if (totalWidth <= 0) return;
+
+        // Reserve fixed space for action buttons (approx 150px for 2 buttons with spacing)
+        double actionsWidth = 200;
+        double availableWidth = totalWidth - actionsWidth;
+
+        // Distribute remaining space among other columns with ratios
+        TableColumn<?, ?>[] columns = billsTable.getColumns().toArray(new TableColumn[0]);
+
+        // Set widths based on preferred ratios
+        columns[0].setPrefWidth(availableWidth * 0.30); // Bill name (30%)
+        columns[1].setPrefWidth(availableWidth * 0.15); // Amount (15%)
+        columns[2].setPrefWidth(availableWidth * 0.15); // Frequency (15%)
+        columns[3].setPrefWidth(availableWidth * 0.20); // Payment Day (20%)
+        columns[4].setPrefWidth(availableWidth * 0.20); // Notes (20%)
+
+        // Set fixed width for actions column
+        columns[5].setPrefWidth(actionsWidth);
+        columns[5].setMinWidth(actionsWidth);
+        columns[5].setMaxWidth(actionsWidth);
     }
 
     private void refreshTable() {

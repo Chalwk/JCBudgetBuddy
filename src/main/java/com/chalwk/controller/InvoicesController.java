@@ -44,10 +44,48 @@ public class InvoicesController implements Initializable {
         return totalCol;
     }
 
+    private static TableColumn<Invoice, Double> getDoubleTableColumn() {
+        TableColumn<Invoice, Double> balanceCol = new TableColumn<>("Balance Owing");
+        balanceCol.setPrefWidth(120);
+        balanceCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
+            @Override
+            protected void updateItem(Double balance, boolean empty) {
+                super.updateItem(balance, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    Invoice invoice = getTableView().getItems().get(getIndex());
+                    double bal = invoice.getBalance();
+                    setText(String.format("$%.2f", bal));
+                }
+            }
+        });
+        return balanceCol;
+    }
+
+    private static TableColumn<Payment, Double> getPaymentDoubleTableColumn() {
+        TableColumn<Payment, Double> amountCol = new TableColumn<>("Amount");
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        amountCol.setPrefWidth(100);
+        amountCol.setCellFactory(col -> new TableCell<Payment, Double>() {
+            @Override
+            protected void updateItem(Double amount, boolean empty) {
+                super.updateItem(amount, empty);
+                if (empty || amount == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("$%.2f", amount));
+                }
+            }
+        });
+        return amountCol;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupTable();
         setupEventHandlers();
+        setupColumnResizing();
     }
 
     public void setUserData(UserData userData) {
@@ -81,9 +119,9 @@ public class InvoicesController implements Initializable {
             private final Button addPaymentBtn = new Button("Add Payment");
 
             {
-                editBtn.getStyleClass().add("warning-button");
-                deleteBtn.getStyleClass().add("danger-button");
-                addPaymentBtn.getStyleClass().add("success-button");
+                editBtn.getStyleClass().addAll("warning-button", "table-button");
+                deleteBtn.getStyleClass().addAll("danger-button", "table-button");
+                addPaymentBtn.getStyleClass().addAll("success-button", "table-button");
 
                 editBtn.setOnAction(e -> {
                     Invoice invoice = getTableView().getItems().get(getIndex());
@@ -108,6 +146,7 @@ public class InvoicesController implements Initializable {
                     setGraphic(null);
                 } else {
                     HBox buttons = new HBox(5, editBtn, addPaymentBtn, deleteBtn);
+                    buttons.getStyleClass().add("actions-container");
                     setGraphic(buttons);
                 }
             }
@@ -135,7 +174,7 @@ public class InvoicesController implements Initializable {
             private final Button viewPaymentsBtn = new Button("View Payments");
 
             {
-                viewPaymentsBtn.getStyleClass().add("primary-button");
+                viewPaymentsBtn.getStyleClass().addAll("primary-button", "table-button");
                 viewPaymentsBtn.setOnAction(e -> {
                     Invoice invoice = getTableView().getItems().get(getIndex());
                     viewPayments(invoice);
@@ -155,28 +194,50 @@ public class InvoicesController implements Initializable {
         return paymentsCol;
     }
 
-    private static TableColumn<Invoice, Double> getDoubleTableColumn() {
-        TableColumn<Invoice, Double> balanceCol = new TableColumn<>("Balance Owing");
-        balanceCol.setPrefWidth(120);
-        balanceCol.setCellFactory(col -> new TableCell<Invoice, Double>() {
-            @Override
-            protected void updateItem(Double balance, boolean empty) {
-                super.updateItem(balance, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    Invoice invoice = getTableView().getItems().get(getIndex());
-                    double bal = invoice.getBalance();
-                    setText(String.format("$%.2f", bal));
-                }
-            }
-        });
-        return balanceCol;
-    }
-
     private void setupEventHandlers() {
         addInvoiceBtn.getStyleClass().add("primary-button");
         addInvoiceBtn.setOnAction(e -> showInvoiceDialog(null));
+    }
+
+    private void setupColumnResizing() {
+        // Initial adjustment
+        adjustColumnWidths();
+
+        // Listen for table width changes
+        invoicesTable.widthProperty().addListener((obs, oldVal, newVal) -> {
+            adjustColumnWidths();
+        });
+
+        // Also adjust when table becomes visible
+        invoicesTable.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                adjustColumnWidths();
+            }
+        });
+    }
+
+    private void adjustColumnWidths() {
+        if (invoicesTable.getColumns().isEmpty()) return;
+
+        double totalWidth = invoicesTable.getWidth();
+        if (totalWidth <= 0) return;
+
+        // Reserve more space for action buttons (3 buttons need more space)
+        double actionsWidth = 250;
+        double availableWidth = totalWidth - actionsWidth;
+
+        TableColumn<?, ?>[] columns = invoicesTable.getColumns().toArray(new TableColumn[0]);
+
+        // Set widths based on preferred ratios
+        columns[0].setPrefWidth(availableWidth * 0.25); // Invoice Number (25%)
+        columns[1].setPrefWidth(availableWidth * 0.20); // Total Amount (20%)
+        columns[2].setPrefWidth(availableWidth * 0.20); // Balance Owing (20%)
+        columns[3].setPrefWidth(availableWidth * 0.35); // Payments (35%)
+
+        // Set fixed width for actions column
+        columns[4].setPrefWidth(actionsWidth);
+        columns[4].setMinWidth(actionsWidth);
+        columns[4].setMaxWidth(actionsWidth);
     }
 
     private void refreshTable() {
@@ -302,15 +363,13 @@ public class InvoicesController implements Initializable {
     private TableColumn<Payment, Void> getPaymentVoidTableColumn(Invoice invoice) {
         TableColumn<Payment, Void> actionsCol = new TableColumn<>("Actions");
         actionsCol.setPrefWidth(150);
-        actionsCol.setCellFactory(col -> new TableCell<Payment, Void>() {
+        actionsCol.setCellFactory(col -> new TableCell<>() {
             private final Button editBtn = new Button("Edit");
             private final Button deleteBtn = new Button("Delete");
 
             {
-                editBtn.getStyleClass().add("warning-button");
-                deleteBtn.getStyleClass().add("danger-button");
-                editBtn.setStyle("-fx-font-size: 10px;");
-                deleteBtn.setStyle("-fx-font-size: 10px;");
+                editBtn.getStyleClass().addAll("warning-button", "table-button");
+                deleteBtn.getStyleClass().addAll("danger-button", "table-button");
 
                 editBtn.setOnAction(e -> {
                     Payment payment = getTableView().getItems().get(getIndex());
@@ -330,29 +389,12 @@ public class InvoicesController implements Initializable {
                     setGraphic(null);
                 } else {
                     HBox buttons = new HBox(5, editBtn, deleteBtn);
+                    buttons.getStyleClass().add("actions-container");
                     setGraphic(buttons);
                 }
             }
         });
         return actionsCol;
-    }
-
-    private static TableColumn<Payment, Double> getPaymentDoubleTableColumn() {
-        TableColumn<Payment, Double> amountCol = new TableColumn<>("Amount");
-        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        amountCol.setPrefWidth(100);
-        amountCol.setCellFactory(col -> new TableCell<Payment, Double>() {
-            @Override
-            protected void updateItem(Double amount, boolean empty) {
-                super.updateItem(amount, empty);
-                if (empty || amount == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("$%.2f", amount));
-                }
-            }
-        });
-        return amountCol;
     }
 
     private void refreshPaymentsTable(TableView<Payment> paymentsTable, Invoice invoice) {

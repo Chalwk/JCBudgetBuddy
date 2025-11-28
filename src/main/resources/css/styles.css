@@ -82,9 +82,33 @@
 
 /* Table button styling for action columns */
 .table-button {
-    -fx-min-width: 80px;
+    -fx-min-width: 70px;
+    -fx-max-width: 70px;
     -fx-font-size: 12px;
-    -fx-padding: 4 8;
+    -fx-padding: 6 10;
+}
+
+/* Ensure action buttons in tables have proper spacing and sizing */
+.actions-container {
+    -fx-spacing: 5;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Specific widths for different buttons in tables */
+.button[text="Edit"],
+.button[text="Delete"] {
+    -fx-min-width: 70px;
+    -fx-max-width: 70px;
+}
+
+.button[text="Add Payment"] {
+    -fx-min-width: 100px;
+    -fx-max-width: 100px;
+}
+
+.button[text="View Payments"] {
+    -fx-min-width: 110px;
+    -fx-max-width: 110px;
 }
 
 /* Table row hover effect */
@@ -105,7 +129,20 @@
 /* Ensure table cells don't truncate text unnecessarily */
 .table-cell {
     -fx-text-overrun: clip;
+    -fx-padding: 8px;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Specific styling for action column cells */
+.table-column:last-child .table-cell {
+    -fx-alignment: CENTER;
     -fx-padding: 5px;
+}
+
+/* Make sure HBox containers for buttons don't cause overflow */
+.table-cell > HBox {
+    -fx-spacing: 5;
+    -fx-alignment: CENTER_LEFT;
 }
 
 /* Card styling for dashboard */
