@@ -27,6 +27,10 @@
     -fx-background-color: #2980b9;
 }
 
+.form-action-button {
+    -fx-translate-y: 7px;
+}
+
 .success-button {
     -fx-background-color: #2ecc71;
     -fx-text-fill: white;

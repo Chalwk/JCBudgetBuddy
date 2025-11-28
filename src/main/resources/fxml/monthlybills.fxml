@@ -7,7 +7,7 @@
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label text="Monthly Bills" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="addBillBtn" text="Add Bill" styleClass="primary-button"/>
+        <Button fx:id="addBillBtn" text="Add Bill" styleClass="primary-button, form-action-button"/>
     </HBox>
 
     <TableView fx:id="billsTable" VBox.vgrow="ALWAYS">

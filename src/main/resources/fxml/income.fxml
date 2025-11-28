@@ -8,7 +8,7 @@
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label text="Income Streams" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="addIncomeStreamBtn" text="Add Income Stream" styleClass="primary-button"/>
+        <Button fx:id="addIncomeStreamBtn" text="Add Income Stream" styleClass="primary-button, form-action-button"/>
     </HBox>
 
     <!-- Income Streams Section -->
