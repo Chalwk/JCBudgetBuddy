@@ -12,12 +12,12 @@
 
     <TableView fx:id="billsTable" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="Bill" prefWidth="200"/>
-            <TableColumn text="Amount" prefWidth="100"/>
-            <TableColumn text="Frequency" prefWidth="100"/>
-            <TableColumn text="Payment Day" prefWidth="150"/>
-            <TableColumn text="Additional Notes" prefWidth="250"/>
-            <TableColumn text="Actions" prefWidth="150"/>
+            <TableColumn text="Bill"/>
+            <TableColumn text="Amount"/>
+            <TableColumn text="Frequency"/>
+            <TableColumn text="Payment Day"/>
+            <TableColumn text="Additional Notes"/>
+            <TableColumn text="Actions"/>
         </columns>
     </TableView>
 </VBox>

@@ -18,14 +18,14 @@
                style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
         <TableView fx:id="incomeStreamsTable" VBox.vgrow="ALWAYS" prefHeight="300">
             <columns>
-                <TableColumn text="Name" prefWidth="150"/>
-                <TableColumn text="Amount" prefWidth="100"/>
-                <TableColumn text="Frequency" prefWidth="100"/>
-                <TableColumn text="Start Date" prefWidth="100"/>
-                <TableColumn text="End Date" prefWidth="100"/>
-                <TableColumn text="Status" prefWidth="80"/>
-                <TableColumn text="Notes" prefWidth="200"/>
-                <TableColumn text="Actions" prefWidth="150"/>
+                <TableColumn text="Name"/>
+                <TableColumn text="Amount"/>
+                <TableColumn text="Frequency"/>
+                <TableColumn text="Start Date"/>
+                <TableColumn text="End Date"/>
+                <TableColumn text="Status"/>
+                <TableColumn text="Notes" />
+                <TableColumn text="Actions"/>
             </columns>
         </TableView>
     </VBox>
@@ -35,12 +35,12 @@
         <Label text="One-Time Payments" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
         <TableView fx:id="oneTimePaymentsTable" VBox.vgrow="ALWAYS" prefHeight="200">
             <columns>
-                <TableColumn text="Description" prefWidth="150"/>
-                <TableColumn text="Amount" prefWidth="100"/>
-                <TableColumn text="Date" prefWidth="100"/>
-                <TableColumn text="Category" prefWidth="100"/>
-                <TableColumn text="Notes" prefWidth="200"/>
-                <TableColumn text="Actions" prefWidth="120"/>
+                <TableColumn text="Description"/>
+                <TableColumn text="Amount"/>
+                <TableColumn text="Date"/>
+                <TableColumn text="Category"/>
+                <TableColumn text="Notes"/>
+                <TableColumn text="Actions"/>
             </columns>
         </TableView>
     </VBox>

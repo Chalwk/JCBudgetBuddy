@@ -184,10 +184,14 @@ public class IncomeController implements Initializable {
             @Override
             protected void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                if (empty || date == null) {
-                    setText("Ongoing");
+                if (empty) {
+                    setText(null);
                 } else {
-                    setText(date.format(DateTimeFormatter.ofPattern("MMM dd, yyyy")));
+                    if (date == null) {
+                        setText("Ongoing");
+                    } else {
+                        setText(date.format(DateTimeFormatter.ofPattern("MMM dd, yyyy")));
+                    }
                 }
             }
         });

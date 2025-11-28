@@ -12,11 +12,11 @@
 
     <TableView fx:id="invoicesTable" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="Invoice Number" prefWidth="150"/>
-            <TableColumn text="Total Amount" prefWidth="120"/>
-            <TableColumn text="Balance Owing" prefWidth="120"/>
-            <TableColumn text="Payments" prefWidth="100"/>
-            <TableColumn text="Actions" prefWidth="200"/>
+            <TableColumn text="Invoice Number"/>
+            <TableColumn text="Total Amount"/>
+            <TableColumn text="Balance Owing"/>
+            <TableColumn text="Payments"/>
+            <TableColumn text="Actions"/>
         </columns>
     </TableView>
 </VBox>
