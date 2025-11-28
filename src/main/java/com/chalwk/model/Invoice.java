@@ -2,6 +2,7 @@ package com.chalwk.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public class Invoice {
         this.payments = payments;
     }
 
+    @JsonIgnore
     public double getBalance() {
         double totalPaid = payments.stream().mapToDouble(Payment::getAmount).sum();
         return total - totalPaid;

@@ -1,6 +1,7 @@
 package com.chalwk.util;
 
 import com.chalwk.model.UserData;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -13,6 +14,7 @@ public class DataManager {
 
     static {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     private DataManager() {
