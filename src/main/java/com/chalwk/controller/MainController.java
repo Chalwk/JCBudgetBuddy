@@ -12,8 +12,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -22,17 +20,13 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
 
-    public VBox income;
-    public VBox weeklyBills;
-    public VBox monthlyBills;
-    public VBox invoices;
-    public GridPane dashboard;
     @FXML
     private TabPane mainTabPane;
     @FXML
     private Button exportBtn, importBtn;
     @FXML
     private Tab incomeTab;
+
     @FXML
     private DashboardController dashboardController;
     @FXML
@@ -43,6 +37,9 @@ public class MainController implements Initializable {
     private InvoicesController invoicesController;
     @FXML
     private IncomeController incomeController;
+    @FXML
+    private PlanController planController;
+
     private DataManager dataManager;
     private UserData userData;
 
@@ -70,6 +67,10 @@ public class MainController implements Initializable {
         if (incomeController != null) {
             incomeController.setUserData(userData);
             incomeController.setMainController(this);
+        }
+        if (planController != null) {
+            planController.setUserData(userData);
+            planController.setMainController(this);
         }
 
         setupEventHandlers();
@@ -131,6 +132,9 @@ public class MainController implements Initializable {
         if (incomeController != null) {
             incomeController.setUserData(userData);
         }
+        if (planController != null) {
+            planController.setUserData(userData);
+        }
     }
 
     public void openIncomeTab() {
@@ -145,6 +149,7 @@ public class MainController implements Initializable {
         if (monthlyBillsController != null) monthlyBillsController.setUserData(userData);
         if (invoicesController != null) invoicesController.setUserData(userData);
         if (incomeController != null) incomeController.setUserData(userData);
+        if (planController != null) planController.setUserData(userData);
     }
 
     private void showAlert(Alert.AlertType type, String title, String message) {

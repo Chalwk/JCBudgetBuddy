@@ -5,16 +5,19 @@
 package com.chalwk.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserData {
     private final List<Bill> weeklyBills;
     private final List<Bill> monthlyBills;
     private final List<Invoice> invoices;
     private final List<IncomeStream> incomeStreams;
+    private final List<PlanItem> planItems;
     private double weeklyIncome;
 
     @JsonCreator
@@ -22,18 +25,14 @@ public class UserData {
                     @JsonProperty("monthlyBills") List<Bill> monthlyBills,
                     @JsonProperty("invoices") List<Invoice> invoices,
                     @JsonProperty("incomeStreams") List<IncomeStream> incomeStreams,
+                    @JsonProperty("planItems") List<PlanItem> planItems,
                     @JsonProperty("weeklyIncome") double weeklyIncome) {
         this.weeklyBills = weeklyBills != null ? weeklyBills : new ArrayList<>();
         this.monthlyBills = monthlyBills != null ? monthlyBills : new ArrayList<>();
         this.invoices = invoices != null ? invoices : new ArrayList<>();
         this.incomeStreams = incomeStreams != null ? incomeStreams : new ArrayList<>();
+        this.planItems = planItems != null ? planItems : new ArrayList<>();
         this.weeklyIncome = weeklyIncome;
-
-        if (this.incomeStreams.isEmpty() && weeklyIncome > 0) {
-            IncomeStream mainIncome = new IncomeStream(1, "Main Income", weeklyIncome, "weekly",
-                    java.time.LocalDate.now(), null, true, "Migrated from old weekly income");
-            this.incomeStreams.add(mainIncome);
-        }
     }
 
     public List<Bill> getWeeklyBills() {
@@ -50,6 +49,10 @@ public class UserData {
 
     public List<IncomeStream> getIncomeStreams() {
         return incomeStreams;
+    }
+
+    public List<PlanItem> getPlanItems() {
+        return planItems;
     }
 
     @Deprecated

@@ -5,10 +5,12 @@
 package com.chalwk.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class IncomeStream {
     private final int id;
     private final String name;

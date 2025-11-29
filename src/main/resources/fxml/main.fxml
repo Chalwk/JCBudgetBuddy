@@ -36,6 +36,9 @@
         <Tab text="Invoices">
             <fx:include fx:id="invoices" source="invoices.fxml"/>
         </Tab>
+        <Tab text="Plans">
+            <fx:include fx:id="plan" source="plan.fxml"/>
+        </Tab>
     </TabPane>
 
     <HBox alignment="CENTER" style="-fx-padding: 15 0 0 0;">
