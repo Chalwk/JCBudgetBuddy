@@ -21,6 +21,7 @@ A personal finance tracker built with JavaFX for managing weekly and monthly exp
   <tr>
     <td><img src="images/screenshot3.png" width="300"/></td>
     <td><img src="images/screenshot4.png" width="300"/></td>
+    <td><img src="images/screenshot5.png" width="300"/></td>
   </tr>
 </table>
 
