@@ -230,15 +230,15 @@ public class InvoicesController implements Initializable {
         double totalWidth = invoicesTable.getWidth();
         if (totalWidth <= 0) return;
 
-        double actionsWidth = 280;
+        double actionsWidth = 275;
         double availableWidth = totalWidth - actionsWidth;
 
         TableColumn<?, ?>[] columns = invoicesTable.getColumns().toArray(new TableColumn[0]);
 
-        columns[0].setPrefWidth(availableWidth * 0.20); // Invoice Number
+        columns[0].setPrefWidth(availableWidth * 0.13); // Invoice Number
         columns[1].setPrefWidth(availableWidth * 0.10); // Total Amount
         columns[2].setPrefWidth(availableWidth * 0.13); // Balance Owing
-        columns[3].setPrefWidth(availableWidth * 0.13); // View Payments button
+        columns[3].setPrefWidth(availableWidth * 0.12); // View Payments button
 
         columns[4].setPrefWidth(actionsWidth);
         columns[4].setMinWidth(actionsWidth);

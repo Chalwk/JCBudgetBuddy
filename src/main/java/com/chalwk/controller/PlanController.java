@@ -211,12 +211,12 @@ public class PlanController implements Initializable {
         double totalWidth = plansTable.getWidth();
         if (totalWidth <= 0) return;
 
-        double actionsWidth = 250;
+        double actionsWidth = 265;
         double availableWidth = totalWidth - actionsWidth;
 
         TableColumn<?, ?>[] columns = plansTable.getColumns().toArray(new TableColumn[0]);
 
-        columns[0].setPrefWidth(availableWidth * 0.15); // Name
+        columns[0].setPrefWidth(availableWidth * 0.17); // Name
         columns[1].setPrefWidth(availableWidth * 0.15); // Target Amount
         columns[2].setPrefWidth(availableWidth * 0.15); // Current Savings
         columns[3].setPrefWidth(availableWidth * 0.10); // Progress
