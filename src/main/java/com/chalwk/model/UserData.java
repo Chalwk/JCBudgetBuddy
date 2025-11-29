@@ -71,4 +71,25 @@ public class UserData {
                 .mapToDouble(IncomeStream::getWeeklyAmount)
                 .sum();
     }
+
+    private double getWeeklyExpenses() {
+        double weeklyExpenses = getWeeklyBills().stream()
+                .mapToDouble(bill -> switch (bill.getFrequency()) {
+                    case "Bi-Weekly" -> bill.getAmount() / 2;
+                    case "Monthly" -> bill.getAmount() / 4;
+                    default -> bill.getAmount();
+                })
+                .sum();
+
+        double monthlyExpensesAsWeekly = getMonthlyBills().stream()
+                .filter(bill -> "automatic".equals(bill.getPaymentMethod()))
+                .mapToDouble(bill -> switch (bill.getFrequency()) {
+                    case "Weekly" -> bill.getAmount();
+                    case "Bi-Weekly" -> bill.getAmount() / 2;
+                    default -> bill.getAmount() / 4;
+                })
+                .sum();
+
+        return weeklyExpenses + monthlyExpensesAsWeekly;
+    }
 }

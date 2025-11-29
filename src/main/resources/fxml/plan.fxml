@@ -5,7 +5,7 @@
 <VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1"
       fx:controller="com.chalwk.controller.PlanController" spacing="15">
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <Label text="Savings Planner" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+        <Label text="Affordability Analysis" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="addPlanBtn" text="Add Plan Item" styleClass="primary-button, form-action-button"/>
     </HBox>
@@ -14,23 +14,37 @@
     <VBox fx:id="advicePanel"
           style="-fx-background-color: #f8f9fa; -fx-border-color: #dee2e6; -fx-border-radius: 5; -fx-padding: 15;"
           spacing="10">
-        <Label text="Affordability Analysis" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
         <HBox spacing="20" alignment="CENTER_LEFT">
             <VBox spacing="5">
-                <Label text="Required Weekly Savings:" style="-fx-text-fill: #666;"/>
+                <Label text="Payment Plan:" style="-fx-text-fill: #666;"/>
+                <Label fx:id="paymentBreakdownLabel"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            </VBox>
+            <VBox spacing="5">
+                <Label text="Required Weekly:" style="-fx-text-fill: #666;"/>
                 <Label fx:id="weeklySavingsLabel"
-                       style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            </VBox>
+            <VBox spacing="5">
+                <Label text="Available Weekly:" style="-fx-text-fill: #666;"/>
+                <Label fx:id="availableFundsLabel"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
             </VBox>
             <VBox spacing="5">
                 <Label text="Timeframe:" style="-fx-text-fill: #666;"/>
                 <Label fx:id="timeframeLabel"
-                       style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
             </VBox>
             <VBox spacing="5">
                 <Label text="Affordability:" style="-fx-text-fill: #666;"/>
-                <Label fx:id="affordabilityAdviceLabel" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Label fx:id="affordabilityAdviceLabel" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
             </VBox>
         </HBox>
+
+        <Label fx:id="detailedAdviceLabel"
+               style="-fx-font-size: 14px; -fx-wrap-text: true;"
+               wrapText="true"/>
+
         <Label text="Double-click any item in the table below to see affordability analysis based on your current income and expenses."
                style="-fx-text-fill: #666; -fx-font-size: 12px;"/>
     </VBox>
@@ -39,11 +53,10 @@
     <TableView fx:id="plansTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn text="Item"/>
-            <TableColumn text="Target Amount"/>
-            <TableColumn text="Current Savings"/>
-            <TableColumn text="Progress"/>
+            <TableColumn text="Total Cost"/>
+            <TableColumn text="Deposit"/>
+            <TableColumn text="Weekly Payment"/>
             <TableColumn text="Timeframe"/>
-            <TableColumn text="Weekly Savings"/>
             <TableColumn text="Actions"/>
         </columns>
     </TableView>

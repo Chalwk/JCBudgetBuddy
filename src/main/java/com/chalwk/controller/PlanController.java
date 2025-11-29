@@ -14,10 +14,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class PlanController implements Initializable {
@@ -32,6 +30,12 @@ public class PlanController implements Initializable {
     private Label weeklySavingsLabel;
     @FXML
     private Label timeframeLabel;
+    @FXML
+    private Label availableFundsLabel;
+    @FXML
+    private Label detailedAdviceLabel;
+    @FXML
+    private Label paymentBreakdownLabel;
     @FXML
     private VBox advicePanel;
 
@@ -63,7 +67,7 @@ public class PlanController implements Initializable {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         nameCol.setPrefWidth(150);
 
-        TableColumn<PlanItem, Double> targetCol = new TableColumn<>("Target Amount");
+        TableColumn<PlanItem, Double> targetCol = new TableColumn<>("Total Cost");
         targetCol.setCellValueFactory(new PropertyValueFactory<>("targetAmount"));
         targetCol.setCellFactory(col -> new TableCell<>() {
             @Override
@@ -77,22 +81,8 @@ public class PlanController implements Initializable {
             }
         });
 
-        TableColumn<PlanItem, Double> savingsCol = new TableColumn<>("Current Savings");
-        savingsCol.setCellValueFactory(new PropertyValueFactory<>("currentSavings"));
-        savingsCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double amount, boolean empty) {
-                super.updateItem(amount, empty);
-                if (empty || amount == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("$%.2f", amount));
-                }
-            }
-        });
-
-        TableColumn<PlanItem, String> progressCol = new TableColumn<>("Progress");
-        progressCol.setCellFactory(col -> new TableCell<>() {
+        TableColumn<PlanItem, String> depositCol = new TableColumn<>("Deposit");
+        depositCol.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -100,16 +90,25 @@ public class PlanController implements Initializable {
                     setText(null);
                 } else {
                     PlanItem plan = getTableView().getItems().get(getIndex());
-                    setText(plan.getProgressPercentage());
-
-                    double progress = plan.getCurrentSavings() / plan.getTargetAmount();
-                    if (progress >= 1.0) {
-                        setTextFill(Color.GREEN);
-                    } else if (progress >= 0.5) {
-                        setTextFill(Color.ORANGE);
+                    if (plan.getDeposit() > 0) {
+                        setText(String.format("$%.2f", plan.getDeposit()));
                     } else {
-                        setTextFill(Color.RED);
+                        setText("$0");
                     }
+                }
+            }
+        });
+
+        TableColumn<PlanItem, String> paymentCol = new TableColumn<>("Weekly Payment");
+        paymentCol.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    PlanItem plan = getTableView().getItems().get(getIndex());
+                    setText(String.format("$%.2f", plan.getWeeklyPayment()));
                 }
             }
         });
@@ -123,21 +122,7 @@ public class PlanController implements Initializable {
                     setText(null);
                 } else {
                     PlanItem plan = getTableView().getItems().get(getIndex());
-                    setText(plan.getTimeframeValue() + " " + plan.getTimeframeUnit());
-                }
-            }
-        });
-
-        TableColumn<PlanItem, Double> weeklySavingsCol = new TableColumn<>("Weekly Savings");
-        weeklySavingsCol.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setText(null);
-                } else {
-                    PlanItem plan = getTableView().getItems().get(getIndex());
-                    setText(String.format("$%.2f/wk", plan.getRequiredWeeklySavings()));
+                    setText(plan.getTimeframeDescription());
                 }
             }
         });
@@ -182,7 +167,7 @@ public class PlanController implements Initializable {
             }
         });
 
-        plansTable.getColumns().addAll(nameCol, targetCol, savingsCol, progressCol, timeframeCol, weeklySavingsCol, actionsCol);
+        plansTable.getColumns().addAll(nameCol, targetCol, depositCol, paymentCol, timeframeCol, actionsCol);
         plansTable.setRowFactory(tv -> {
             TableRow<PlanItem> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
@@ -216,16 +201,15 @@ public class PlanController implements Initializable {
 
         TableColumn<?, ?>[] columns = plansTable.getColumns().toArray(new TableColumn[0]);
 
-        columns[0].setPrefWidth(availableWidth * 0.17); // Name
-        columns[1].setPrefWidth(availableWidth * 0.15); // Target Amount
-        columns[2].setPrefWidth(availableWidth * 0.15); // Current Savings
-        columns[3].setPrefWidth(availableWidth * 0.10); // Progress
-        columns[4].setPrefWidth(availableWidth * 0.15); // Timeframe
-        columns[5].setPrefWidth(availableWidth * 0.15); // Weekly Savings
+        columns[0].setPrefWidth(availableWidth * 0.25); // Name
+        columns[1].setPrefWidth(availableWidth * 0.20); // Total Cost
+        columns[2].setPrefWidth(availableWidth * 0.15); // Deposit
+        columns[3].setPrefWidth(availableWidth * 0.15); // Weekly Payment
+        columns[4].setPrefWidth(availableWidth * 0.25); // Timeframe
 
-        columns[6].setPrefWidth(actionsWidth);
-        columns[6].setMinWidth(actionsWidth);
-        columns[6].setMaxWidth(actionsWidth);
+        columns[5].setPrefWidth(actionsWidth);
+        columns[5].setMinWidth(actionsWidth);
+        columns[5].setMaxWidth(actionsWidth);
     }
 
     private void refreshTable() {
@@ -250,70 +234,30 @@ public class PlanController implements Initializable {
         TextArea descriptionField = new TextArea();
         descriptionField.setPrefRowCount(3);
         TextField targetAmountField = new TextField();
-        TextField currentSavingsField = new TextField();
-        ComboBox<String> timeframeUnitCombo = new ComboBox<>();
-        TextField timeframeValueField = new TextField();
-        DatePicker targetDatePicker = new DatePicker();
-        CheckBox hirePurchaseCheckbox = new CheckBox("Use Hire Purchase");
         TextField depositField = new TextField();
-        TextField interestField = new TextField();
-        TextField monthsField = new TextField();
+        TextField weeklyPaymentField = new TextField();
 
-        timeframeUnitCombo.getItems().addAll("Days", "Weeks", "Months");
-        timeframeUnitCombo.setValue("Weeks");
-
-        depositField.setDisable(true);
-        interestField.setDisable(true);
-        monthsField.setDisable(true);
-
-        hirePurchaseCheckbox.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            depositField.setDisable(!newVal);
-            interestField.setDisable(!newVal);
-            monthsField.setDisable(!newVal);
-        });
-
-        if (currentSavingsField.getText().isEmpty()) currentSavingsField.setText("0");
-        if (timeframeValueField.getText().isEmpty()) timeframeValueField.setText("4");
-        if (depositField.getText().isEmpty()) depositField.setText("0");
-        if (interestField.getText().isEmpty()) interestField.setText("0");
-        if (monthsField.getText().isEmpty()) monthsField.setText("12");
-        if (targetDatePicker.getValue() == null) targetDatePicker.setValue(LocalDate.now().plusWeeks(4));
+        depositField.setText("0");
+        weeklyPaymentField.setText("50");
 
         if (plan != null) {
             nameField.setText(plan.getName());
             descriptionField.setText(plan.getDescription());
             targetAmountField.setText(String.valueOf(plan.getTargetAmount()));
-            currentSavingsField.setText(String.valueOf(plan.getCurrentSavings()));
-            timeframeUnitCombo.setValue(plan.getTimeframeUnit());
-            timeframeValueField.setText(String.valueOf(plan.getTimeframeValue()));
-            targetDatePicker.setValue(plan.getTargetDate());
-            hirePurchaseCheckbox.setSelected(plan.isUseHirePurchase());
-            depositField.setText(String.valueOf(plan.getHirePurchaseDeposit()));
-            interestField.setText(String.valueOf(plan.getHirePurchaseInterest()));
-            monthsField.setText(String.valueOf(plan.getHirePurchaseMonths()));
+            depositField.setText(String.valueOf(plan.getDeposit()));
+            weeklyPaymentField.setText(String.valueOf(plan.getWeeklyPayment()));
         }
 
         grid.add(new Label("Item Name:"), 0, 0);
         grid.add(nameField, 1, 0);
         grid.add(new Label("Description:"), 0, 1);
         grid.add(descriptionField, 1, 1);
-        grid.add(new Label("Target Amount:"), 0, 2);
+        grid.add(new Label("Total Cost:"), 0, 2);
         grid.add(targetAmountField, 1, 2);
-        grid.add(new Label("Current Savings:"), 0, 3);
-        grid.add(currentSavingsField, 1, 3);
-        grid.add(new Label("Timeframe Unit:"), 0, 4);
-        grid.add(timeframeUnitCombo, 1, 4);
-        grid.add(new Label("Timeframe Value:"), 0, 5);
-        grid.add(timeframeValueField, 1, 5);
-        grid.add(new Label("Target Date:"), 0, 6);
-        grid.add(targetDatePicker, 1, 6);
-        grid.add(hirePurchaseCheckbox, 0, 7, 2, 1);
-        grid.add(new Label("Deposit:"), 0, 8);
-        grid.add(depositField, 1, 8);
-        grid.add(new Label("Interest (%):"), 0, 9);
-        grid.add(interestField, 1, 9);
-        grid.add(new Label("Months:"), 0, 10);
-        grid.add(monthsField, 1, 10);
+        grid.add(new Label("Deposit (Optional):"), 0, 3);
+        grid.add(depositField, 1, 3);
+        grid.add(new Label("Weekly Payment:"), 0, 4);
+        grid.add(weeklyPaymentField, 1, 4);
 
         dialog.getDialogPane().setContent(grid);
         dialog.setResultConverter(dialogButton -> {
@@ -324,33 +268,38 @@ public class PlanController implements Initializable {
                         return null;
                     }
                     if (targetAmountField.getText().trim().isEmpty()) {
-                        showAlert("Invalid input", "Target Amount is required.");
+                        showAlert("Invalid input", "Total Cost is required.");
+                        return null;
+                    }
+                    if (weeklyPaymentField.getText().trim().isEmpty()) {
+                        showAlert("Invalid input", "Weekly Payment is required.");
                         return null;
                     }
 
                     String name = nameField.getText().trim();
                     String description = descriptionField.getText().trim();
                     double targetAmount = Double.parseDouble(targetAmountField.getText());
-                    double currentSavings = Double.parseDouble(currentSavingsField.getText());
-                    String timeframeUnit = timeframeUnitCombo.getValue();
-                    int timeframeValue = Integer.parseInt(timeframeValueField.getText());
-                    LocalDate targetDate = targetDatePicker.getValue();
+                    double deposit = Double.parseDouble(depositField.getText());
+                    double weeklyPayment = Double.parseDouble(weeklyPaymentField.getText());
 
-                    if (targetDate == null) {
-                        showAlert("Invalid input", "Target Date is required.");
+                    if (targetAmount <= 0) {
+                        showAlert("Invalid input", "Total cost must be greater than 0.");
                         return null;
                     }
 
-                    boolean useHirePurchase = hirePurchaseCheckbox.isSelected();
+                    if (weeklyPayment <= 0) {
+                        showAlert("Invalid input", "Weekly payment must be greater than 0.");
+                        return null;
+                    }
 
-                    double deposit = 0;
-                    double interest = 0;
-                    int months = 0;
+                    if (deposit < 0) {
+                        showAlert("Invalid input", "Deposit cannot be negative.");
+                        return null;
+                    }
 
-                    if (useHirePurchase) {
-                        deposit = Double.parseDouble(depositField.getText());
-                        interest = Double.parseDouble(interestField.getText());
-                        months = Integer.parseInt(monthsField.getText());
+                    if (deposit >= targetAmount) {
+                        showAlert("Invalid input", "Deposit cannot be greater than or equal to total cost.");
+                        return null;
                     }
 
                     return new PlanItem(
@@ -358,14 +307,8 @@ public class PlanController implements Initializable {
                             name,
                             description,
                             targetAmount,
-                            currentSavings,
-                            timeframeUnit,
-                            timeframeValue,
-                            targetDate,
-                            useHirePurchase,
                             deposit,
-                            interest,
-                            months
+                            weeklyPayment
                     );
                 } catch (NumberFormatException e) {
                     showAlert("Invalid input", "Please check all numeric fields are valid numbers.");
@@ -412,39 +355,50 @@ public class PlanController implements Initializable {
     }
 
     private void showAffordabilityAnalysis(PlanItem plan) {
-        double availableWeeklyFunds = userData.getTotalWeeklyIncome() - getWeeklyExpenses();
+        double availableWeeklyFunds = getAvailableWeeklyFunds();
         double requiredWeekly = plan.getRequiredWeeklySavings();
         String affordability = plan.getAffordabilityStatus(availableWeeklyFunds);
+        String detailedInfo = plan.getDetailedAffordabilityInfo(availableWeeklyFunds);
 
-        weeklySavingsLabel.setText(String.format("$%.2f", requiredWeekly));
-        timeframeLabel.setText(plan.getTimeframeValue() + " " + plan.getTimeframeUnit());
+        weeklySavingsLabel.setText(String.format("$%.2f/wk", requiredWeekly));
+        availableFundsLabel.setText(String.format("$%.2f/wk", availableWeeklyFunds));
+        timeframeLabel.setText(plan.getTimeframeDescription());
+        paymentBreakdownLabel.setText(plan.getPaymentBreakdown());
         affordabilityAdviceLabel.setText(affordability);
+        detailedAdviceLabel.setText(detailedInfo);
 
-        switch (affordability) {
-            case "Easily Affordable":
-                affordabilityAdviceLabel.setStyle("-fx-text-fill: #2ecc71; -fx-font-weight: bold;");
-                break;
-            case "Affordable":
-                affordabilityAdviceLabel.setStyle("-fx-text-fill: #f39c12; -fx-font-weight: bold;");
-                break;
-            case "Challenging":
-                affordabilityAdviceLabel.setStyle("-fx-text-fill: #e67e22; -fx-font-weight: bold;");
-                break;
-            default:
-                affordabilityAdviceLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+        if ("Affordable".equals(affordability)) {
+            affordabilityAdviceLabel.setStyle("-fx-text-fill: #2ecc71; -fx-font-weight: bold;");
+            detailedAdviceLabel.setStyle("-fx-text-fill: #2ecc71;");
+        } else {
+            affordabilityAdviceLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+            detailedAdviceLabel.setStyle("-fx-text-fill: #e74c3c;");
         }
 
         advicePanel.setVisible(true);
     }
 
-    private double getWeeklyExpenses() {
-        return userData.getWeeklyBills().stream()
+    private double getAvailableWeeklyFunds() {
+        double totalWeeklyIncome = userData.getTotalWeeklyIncome();
+
+        double weeklyExpenses = userData.getWeeklyBills().stream()
                 .mapToDouble(bill -> switch (bill.getFrequency()) {
                     case "Bi-Weekly" -> bill.getAmount() / 2;
                     case "Monthly" -> bill.getAmount() / 4;
                     default -> bill.getAmount();
                 })
                 .sum();
+
+        double monthlyExpensesAsWeekly = userData.getMonthlyBills().stream()
+                .filter(bill -> "automatic".equals(bill.getPaymentMethod()))
+                .mapToDouble(bill -> switch (bill.getFrequency()) {
+                    case "Weekly" -> bill.getAmount();
+                    case "Bi-Weekly" -> bill.getAmount() / 2;
+                    default -> bill.getAmount() / 4;
+                })
+                .sum();
+
+        return totalWeeklyIncome - (weeklyExpenses + monthlyExpensesAsWeekly);
     }
 
     private int generateNewId() {
