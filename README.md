@@ -1,7 +1,5 @@
 # JCBudgetBuddy
 
-# JCBudgetBuddy
-
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Latest Release](https://img.shields.io/github/v/release/Chalwk/JCBudgetBuddy?sort=semver)](https://github.com/Chalwk/JCBudgetBuddy/releases/latest)
 [![Build Status](https://github.com/Chalwk/MapCycleBuilder/actions/workflows/build.yml/badge.svg)](https://github.com/Chalwk/MapCycleBuilder/actions/workflows/build.yml)
