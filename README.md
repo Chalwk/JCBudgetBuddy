@@ -2,7 +2,7 @@
 
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Latest Release](https://img.shields.io/github/v/release/Chalwk/JCBudgetBuddy?sort=semver)](https://github.com/Chalwk/JCBudgetBuddy/releases/latest)
-[![Build Status](https://github.com/Chalwk/MapCycleBuilder/actions/workflows/build.yml/badge.svg)](https://github.com/Chalwk/MapCycleBuilder/actions/workflows/build.yml)
+[![Build Status](https://github.com/Chalwk/JCBudgetBuddy/actions/workflows/build.yml/badge.svg)](https://github.com/Chalwk/JCBudgetBuddy/actions/workflows/build.yml)
 
 A personal finance tracker built with JavaFX for managing weekly and monthly expenses, invoices, and payments.
 
