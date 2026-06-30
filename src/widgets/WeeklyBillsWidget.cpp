@@ -13,7 +13,15 @@ WeeklyBillsWidget::WeeklyBillsWidget(QWidget* parent)
     connect(deleteButton(), &QPushButton::clicked, this, &WeeklyBillsWidget::deleteBill);
     connect(table(), &QTableView::doubleClicked, this, &WeeklyBillsWidget::onDoubleClicked);
     connect(&DataManager::instance(), &DataManager::dataChanged, this, &WeeklyBillsWidget::refresh);
-
+    connect(this, &BaseTableWidget::rowsMoved,
+            this, [this](int from, int to) {
+                auto& list = DataManager::instance().data().weeklyBills;
+                if (from < 0 || from >= list.size() ||
+                    to < 0 || to >= list.size() || from == to)
+                    return;
+                list.move(from, to);
+                if (persistChanges()) refresh();
+            });
     refresh();
 }
 

@@ -24,7 +24,15 @@ InvoicesWidget::InvoicesWidget(QWidget* parent)
     connect(deleteButton(), &QPushButton::clicked, this, &InvoicesWidget::deleteInvoice);
     connect(table(), &QTableView::doubleClicked, this, &InvoicesWidget::onDoubleClicked);
     connect(&DataManager::instance(), &DataManager::dataChanged, this, &InvoicesWidget::refresh);
-
+    connect(this, &BaseTableWidget::rowsMoved,
+            this, [this](int from, int to) {
+                auto& list = DataManager::instance().data().invoices;
+                if (from < 0 || from >= list.size() ||
+                    to < 0 || to >= list.size() || from == to)
+                    return;
+                list.move(from, to);
+                if (persistChanges()) refresh();
+            });
     refresh();
 }
 

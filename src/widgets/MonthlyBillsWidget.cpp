@@ -13,7 +13,15 @@ MonthlyBillsWidget::MonthlyBillsWidget(QWidget* parent)
     connect(deleteButton(), &QPushButton::clicked, this, &MonthlyBillsWidget::deleteBill);
     connect(table(), &QTableView::doubleClicked, this, &MonthlyBillsWidget::onDoubleClicked);
     connect(&DataManager::instance(), &DataManager::dataChanged, this, &MonthlyBillsWidget::refresh);
-
+    connect(this, &BaseTableWidget::rowsMoved,
+            this, [this](int from, int to) {
+                auto& list = DataManager::instance().data().monthlyBills;
+                if (from < 0 || from >= list.size() ||
+                    to < 0 || to >= list.size() || from == to)
+                    return;
+                list.move(from, to);
+                if (persistChanges()) refresh();
+            });
     refresh();
 }
 

@@ -48,6 +48,10 @@ cmake --version
 
 ## Build & Package from VS Code
 
+```bash
+build_package.bat
+```
+
 1. **Clean previous build** (recommended to avoid cache or Qt mismatch issues):
    ```bash
    rmdir /s /q build

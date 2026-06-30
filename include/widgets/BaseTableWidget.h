@@ -15,6 +15,9 @@ public:
 
     virtual void refresh() = 0;
 
+signals:
+    void rowsMoved(int fromRow, int toRow);
+
 protected:
     int selectedRow() const;
     void setupTable(const QStringList& headers);

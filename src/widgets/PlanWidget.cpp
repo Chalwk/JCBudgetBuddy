@@ -18,7 +18,15 @@ PlanWidget::PlanWidget(QWidget* parent)
     connect(analyzeButton, &QPushButton::clicked, this, &PlanWidget::analyzePlan);
     connect(table(), &QTableView::doubleClicked, this, &PlanWidget::onDoubleClicked);
     connect(&DataManager::instance(), &DataManager::dataChanged, this, &PlanWidget::refresh);
-
+    connect(this, &BaseTableWidget::rowsMoved,
+            this, [this](int from, int to) {
+                auto& list = DataManager::instance().data().plans;
+                if (from < 0 || from >= list.size() ||
+                    to < 0 || to >= list.size() || from == to)
+                    return;
+                list.move(from, to);
+                if (persistChanges()) refresh();
+            });
     refresh();
 }
 
