@@ -2,8 +2,12 @@ QMainWindow,
 QWidget {
     background: #f7f9fc;
     color: #1f2937;
-    font-family: Segoe UI;
+    font-family: "Segoe UI";
     font-size: 10pt;
+}
+
+QDialog {
+    background: #f7f9fc;
 }
 
 #headerFrame {
@@ -40,8 +44,8 @@ QWidget {
 
 #dashboardCardTitle {
     font-size: 11px;
+    font-weight: 700;
     color: #1e3a8a;
-    font-weight: bold;
 }
 
 #dashboardCardValue {
@@ -51,9 +55,9 @@ QWidget {
 }
 
 QTabWidget::pane {
+    background: white;
     border: 1px solid #dbe4f0;
     border-radius: 12px;
-    background: white;
     top: -1px;
 }
 
@@ -74,6 +78,7 @@ QTabBar::tab:selected {
 QTableView {
     background: white;
     border: 1px solid #dbe4f0;
+    gridline-color: #e5e7eb;
 }
 
 QHeaderView::section {
@@ -104,20 +109,164 @@ QPushButton:pressed {
 QLineEdit,
 QComboBox,
 QDateEdit,
+QSpinBox,
+QDoubleSpinBox,
 QTextEdit {
     background: white;
+    color: #1f2937;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
-    padding: 6px;
+    padding: 6px 10px;
+    selection-background-color: #dbeafe;
 }
 
-QDoubleSpinBox {
-    background: white;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    min-height: 28px;
+QLineEdit:focus,
+QComboBox:focus,
+QDateEdit:focus,
+QSpinBox:focus,
+QDoubleSpinBox:focus,
+QTextEdit:focus {
+    border: 1px solid #2563eb;
 }
 
-QDialog {
-    background: #f7f9fc;
+QComboBox {
+    padding-right: 32px;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 28px;
+    border: none;
+    border-left: 1px solid #cbd5e1;
+    background: #f8fafc;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+QComboBox::drop-down:hover {
+    background: #eef4ff;
+}
+
+QComboBox::down-arrow {
+    image: url(:/icons/chevron-down.svg);
+    width: 12px;
+    height: 12px;
+}
+
+QSpinBox,
+QDoubleSpinBox,
+QDateEdit {
+    padding-right: 28px;
+}
+
+QSpinBox::up-button,
+QDoubleSpinBox::up-button,
+QDateEdit::up-button,
+QSpinBox::down-button,
+QDoubleSpinBox::down-button,
+QDateEdit::down-button {
+    background: #f8fafc;
+    border: none;
+    width: 24px;
+}
+
+QSpinBox::up-button,
+QDoubleSpinBox::up-button,
+QDateEdit::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    border-left: 1px solid #cbd5e1;
+    border-bottom: 1px solid #cbd5e1;
+    border-top-right-radius: 8px;
+}
+
+QSpinBox::down-button,
+QDoubleSpinBox::down-button,
+QDateEdit::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    border-left: 1px solid #cbd5e1;
+    border-bottom-right-radius: 8px;
+}
+
+QSpinBox::up-button:hover,
+QDoubleSpinBox::up-button:hover,
+QDateEdit::up-button:hover,
+QSpinBox::down-button:hover,
+QDoubleSpinBox::down-button:hover,
+QDateEdit::down-button:hover {
+    background: #eef4ff;
+}
+
+QSpinBox::up-arrow,
+QDoubleSpinBox::up-arrow,
+QDateEdit::up-arrow {
+    image: url(:/icons/chevron-up.svg);
+    width: 10px;
+    height: 10px;
+}
+
+QSpinBox::down-arrow,
+QDoubleSpinBox::down-arrow,
+QDateEdit::down-arrow {
+    image: url(:/icons/chevron-down.svg);
+    width: 10px;
+    height: 10px;
+}
+
+QScrollBar:vertical {
+    background: transparent;
+    width: 12px;
+    margin: 2px;
+}
+
+QScrollBar::handle:vertical {
+    background: #cbd5e1;
+    min-height: 30px;
+    border-radius: 6px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #94a3b8;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0;
+    border: none;
+    background: transparent;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: transparent;
+}
+
+QScrollBar:horizontal {
+    background: transparent;
+    height: 12px;
+    margin: 2px;
+}
+
+QScrollBar::handle:horizontal {
+    background: #cbd5e1;
+    min-width: 30px;
+    border-radius: 6px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: #94a3b8;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+    width: 0;
+    border: none;
+    background: transparent;
+}
+
+QScrollBar::add-page:horizontal,
+QScrollBar::sub-page:horizontal {
+    background: transparent;
 }

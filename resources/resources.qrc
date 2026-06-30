@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>style.qss</file>
+        <file>icons/chevron-down.svg</file>
+        <file>icons/chevron-up.svg</file>
     </qresource>
 </RCC>
