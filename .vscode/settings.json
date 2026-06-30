@@ -1,0 +1,18 @@
+{
+  "terminal.integrated.profiles.windows": {
+    "MSVC Build Environment": {
+      "path": "C:\\Windows\\System32\\cmd.exe",
+      "args": [
+        "/k",
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\18\\BuildTools\\Common7\\Tools\\VsDevCmd.bat"
+      ]
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "MSVC Build Environment",
+  "C_Cpp.errorSquiggles": "enabled",
+  "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+  "cmake.configureArgs": [
+    "-DQt6_DIR=C:/Qt/6.11.1/msvc2022_64/lib/cmake/Qt6"
+  ],
+  "cmake.buildBeforeRun": true
+}

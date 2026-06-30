@@ -1,0 +1,94 @@
+#include "MainWindow.h"
+#include "data/DataManager.h"
+
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QMessageBox>
+#include <QFrame>
+
+MainWindow::MainWindow(QWidget* parent)
+    : QMainWindow(parent) {
+    setWindowTitle("JCBudgetBuddy");
+    resize(1280, 860);
+
+    m_central = new QWidget(this);
+    setCentralWidget(m_central);
+
+    auto* root = new QVBoxLayout(m_central);
+
+    auto* headerFrame = new QFrame;
+    headerFrame->setObjectName("headerFrame");
+    auto* headerLayout = new QVBoxLayout(headerFrame);
+    auto* title = new QLabel("JCBudgetBuddy");
+    title->setObjectName("appTitle");
+    auto* subtitle = new QLabel("Personal finance tracking, invoices, and affordability planning");
+    subtitle->setObjectName("appSubtitle");
+    headerLayout->addWidget(title);
+    headerLayout->addWidget(subtitle);
+
+    m_dashboard = new DashboardWidget;
+    m_tabs = new QTabWidget;
+    m_incomeWidget = new IncomeWidget;
+    m_weeklyBillsWidget = new WeeklyBillsWidget;
+    m_monthlyBillsWidget = new MonthlyBillsWidget;
+    m_invoicesWidget = new InvoicesWidget;
+    m_planWidget = new PlanWidget;
+
+    m_tabs->addTab(m_incomeWidget, "Income");
+    m_tabs->addTab(m_weeklyBillsWidget, "Weekly Bills");
+    m_tabs->addTab(m_monthlyBillsWidget, "Monthly Bills");
+    m_tabs->addTab(m_invoicesWidget, "Invoices");
+    m_tabs->addTab(m_planWidget, "Plans");
+
+    root->addWidget(headerFrame);
+    root->addWidget(m_dashboard);
+    root->addWidget(m_tabs, 1);
+
+    connect(m_dashboard, &DashboardWidget::manageIncomeRequested, this, &MainWindow::goToIncomeTab);
+    connect(&DataManager::instance(), &DataManager::dataChanged, this, &MainWindow::refreshAll);
+
+    if (!DataManager::instance().lastError().isEmpty()) {
+        QMessageBox::warning(this, "Load Warning", DataManager::instance().lastError());
+    }
+
+    updateDashboard();
+}
+
+void MainWindow::goToIncomeTab() {
+    m_tabs->setCurrentWidget(m_incomeWidget);
+}
+
+void MainWindow::refreshAll() {
+    m_incomeWidget->refresh();
+    m_weeklyBillsWidget->refresh();
+    m_monthlyBillsWidget->refresh();
+    m_invoicesWidget->refresh();
+    m_planWidget->refresh();
+    updateDashboard();
+}
+
+void MainWindow::updateDashboard() {
+    const auto& data = DataManager::instance().data();
+
+    double weeklyIncome = 0.0;
+    int activeIncomeStreams = 0;
+    for (const auto& income : data.incomes) {
+        weeklyIncome += income.weeklyAmount();
+        if (income.isCurrentlyActive()) {
+            ++activeIncomeStreams;
+        }
+    }
+
+    double weeklyExpenses = 0.0;
+    for (const auto& bill : data.weeklyBills) {
+        weeklyExpenses += bill.weeklyAmount();
+    }
+    for (const auto& bill : data.monthlyBills) {
+        weeklyExpenses += bill.weeklyAmount();
+    }
+
+    const double remaining = weeklyIncome - weeklyExpenses;
+    const double monthlyAverage = remaining * 4.0;
+
+    m_dashboard->setStats(weeklyIncome, weeklyExpenses, remaining, monthlyAverage, activeIncomeStreams);
+}
