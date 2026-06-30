@@ -6,7 +6,7 @@
 IncomeWidget::IncomeWidget(QWidget* parent)
     : BaseTableWidget(parent) {
     setupTable({ "Name", "Amount", "Frequency", "Start Date", "End Date", "Active", "Notes" });
-    setupButtons("Add Income", "Edit", "Delete");
+    setupButtons("Add Income Stream", "Edit", "Delete");
 
     connect(addButton(), &QPushButton::clicked, this, &IncomeWidget::addIncome);
     connect(editButton(), &QPushButton::clicked, this, &IncomeWidget::editIncome);

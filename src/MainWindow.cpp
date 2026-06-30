@@ -15,10 +15,13 @@ MainWindow::MainWindow(QWidget* parent)
     setCentralWidget(m_central);
 
     auto* root = new QVBoxLayout(m_central);
+    root->setContentsMargins(8, 8, 8, 8);
+    root->setSpacing(6);
 
     auto* headerFrame = new QFrame;
     headerFrame->setObjectName("headerFrame");
     auto* headerLayout = new QVBoxLayout(headerFrame);
+    headerLayout->setContentsMargins(12, 8, 12, 8);
     auto* title = new QLabel("JCBudgetBuddy");
     title->setObjectName("appTitle");
     auto* subtitle = new QLabel("Personal finance tracking, invoices, and affordability planning");

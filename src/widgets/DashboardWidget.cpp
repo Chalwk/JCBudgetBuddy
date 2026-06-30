@@ -23,6 +23,9 @@ static QFrame* makeCard(const QString& title, QLabel*& valueLabel) {
 DashboardWidget::DashboardWidget(QWidget* parent)
     : QWidget(parent) {
     auto* root = new QVBoxLayout(this);
+    root->setContentsMargins(0, 0, 0, 0);
+    root->setSpacing(8);
+
     auto* titleRow = new QHBoxLayout;
     auto* titleLabel = new QLabel("Dashboard Overview");
     titleLabel->setObjectName("sectionTitle");
@@ -32,23 +35,29 @@ DashboardWidget::DashboardWidget(QWidget* parent)
     titleRow->addStretch();
     titleRow->addWidget(manageButton);
 
-    auto* grid = new QGridLayout;
-    grid->addWidget(makeCard("Weekly Income", m_weeklyIncomeValue), 0, 0);
-    grid->addWidget(makeCard("Weekly Expenses", m_weeklyExpensesValue), 0, 1);
-    grid->addWidget(makeCard("Remaining Balance", m_remainingValue), 1, 0);
-    grid->addWidget(makeCard("Monthly Average", m_monthlyAverageValue), 1, 1);
-    grid->addWidget(makeCard("Active Income Streams", m_activeIncomeValue), 2, 0, 1, 2);
+    auto* cardsLayout = new QHBoxLayout;
+    cardsLayout->setSpacing(10);
+    cardsLayout->addWidget(makeCard("Weekly Income", m_weeklyIncomeValue));
+    cardsLayout->addWidget(makeCard("Weekly Expenses", m_weeklyExpensesValue));
+    cardsLayout->addWidget(makeCard("Remaining Balance", m_remainingValue));
+    cardsLayout->addWidget(makeCard("Monthly Average", m_monthlyAverageValue));
+
+    for (int i = 0; i < cardsLayout->count(); ++i) {
+        QLayoutItem* item = cardsLayout->itemAt(i);
+        if (item->widget()) {
+            item->widget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        }
+    }
 
     root->addLayout(titleRow);
-    root->addLayout(grid);
+    root->addLayout(cardsLayout);
 }
 
-void DashboardWidget::setStats(double weeklyIncome, double weeklyExpenses, double remaining, double monthlyAverage, int activeIncomeStreams) {
+void DashboardWidget::setStats(double weeklyIncome, double weeklyExpenses, double remaining, double monthlyAverage, int /*activeIncomeStreams*/) {
     m_weeklyIncomeValue->setText(QString("$%1").arg(weeklyIncome, 0, 'f', 2));
     m_weeklyExpensesValue->setText(QString("$%1").arg(weeklyExpenses, 0, 'f', 2));
     m_remainingValue->setText(QString("$%1").arg(remaining, 0, 'f', 2));
     m_monthlyAverageValue->setText(QString("$%1").arg(monthlyAverage, 0, 'f', 2));
-    m_activeIncomeValue->setText(QString::number(activeIncomeStreams));
 
     const QString balanceColor = remaining >= 0.0 ? "#107c10" : "#c50f1f";
     m_remainingValue->setStyleSheet(QString("font-size: 24px; font-weight: bold; color: %1;").arg(balanceColor));

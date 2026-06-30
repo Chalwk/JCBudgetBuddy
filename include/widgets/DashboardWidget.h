@@ -19,5 +19,4 @@ private:
     QLabel* m_weeklyExpensesValue{};
     QLabel* m_remainingValue{};
     QLabel* m_monthlyAverageValue{};
-    QLabel* m_activeIncomeValue{};
 };
