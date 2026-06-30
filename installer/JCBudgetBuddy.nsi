@@ -1,3 +1,6 @@
+; Copyright (c) 2026 Jericho Crosby (Chalwk).
+; Licensed under the GPL License.
+
 !include "MUI2.nsh"
 
 !define PRODUCT_NAME "JCBudgetBuddy"

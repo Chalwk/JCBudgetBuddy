@@ -1,3 +1,6 @@
+// Copyright (c) 2026 Jericho Crosby (Chalwk).
+// Licensed under the GPL License.
+
 #include "widgets/SavingsGoalsWidget.h"
 #include "data/DataManager.h"
 #include "dialogs/ItemDialogs.h"

@@ -1,3 +1,8 @@
+/*
+Copyright (c) 2026 Jericho Crosby (Chalwk).
+Licensed under the GPL License.
+*/
+
 QMainWindow,
 QWidget {
     background: #f7f9fc;

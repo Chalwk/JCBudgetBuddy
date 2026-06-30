@@ -1,3 +1,6 @@
+REM Copyright (c) 2026 Jericho Crosby (Chalwk).
+REM Licensed under the GPL License.
+
 @echo off
 setlocal enabledelayedexpansion
 
