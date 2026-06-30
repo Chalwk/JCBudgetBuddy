@@ -4,6 +4,8 @@
 !define PRODUCT_VERSION "1.0.0"
 !define PRODUCT_PUBLISHER "Chalwk"
 
+!insertmacro MUI_LANGUAGE "English"
+
 Name "${PRODUCT_NAME}"
 OutFile "JCBudgetBuddySetup.exe"
 InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}"
