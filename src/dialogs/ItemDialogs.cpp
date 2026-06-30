@@ -475,14 +475,14 @@ void PlanAnalysisDialog::refreshAnalysis() {
 
     double weeklyIncome = 0.0;
     double weeklyBills = 0.0;
-    const auto& data = DataManager::instance().data();
-    for (const auto& income : data.incomes) {
+    const auto& userData = DataManager::instance().data();
+    for (const auto& income : userData.incomes) {
         weeklyIncome += income.weeklyAmount();
     }
-    for (const auto& bill : data.weeklyBills) {
+    for (const auto& bill : userData.weeklyBills) {
         weeklyBills += bill.weeklyAmount();
     }
-    for (const auto& bill : data.monthlyBills) {
+    for (const auto& bill : userData.monthlyBills) {
         weeklyBills += bill.weeklyAmount();
     }
     const double available = weeklyIncome - weeklyBills;
