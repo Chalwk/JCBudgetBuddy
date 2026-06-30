@@ -63,6 +63,11 @@ cmake --version
    cmake --build build --config Release
    ```
 
+4. **Package** the application
+   ```bash
+   installer\package.bat build
+   ```
+
 ---
 
 ## Creating an installer with NSIS

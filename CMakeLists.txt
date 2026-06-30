@@ -9,7 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets PrintSupport)
 
 set(SOURCES
     src/main.cpp
@@ -64,7 +64,7 @@ target_include_directories(JCBudgetBuddy PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_link_libraries(JCBudgetBuddy PRIVATE Qt6::Widgets)
+target_link_libraries(JCBudgetBuddy PRIVATE Qt6::Widgets Qt6::PrintSupport)
 
 if (MSVC)
     target_compile_options(JCBudgetBuddy PRIVATE /W4 /permissive-)
