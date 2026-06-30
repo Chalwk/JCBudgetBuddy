@@ -4,6 +4,31 @@ A Windows desktop personal finance tracker built with Qt Widgets, JSON persisten
 
 ---
 
+<table>
+  <tr>
+    <td><img src="./screenshots/1.png" width="300"></td>
+    <td><img src="./screenshots/2.png" width="300"></td>
+    <td><img src="./screenshots/3.png" width="300"></td>
+  </tr>
+  <tr>
+    <td><img src="./screenshots/4.png" width="300"></td>
+    <td><img src="./screenshots/5.png" width="300"></td>
+    <td><img src="./screenshots/6.png" width="300"></td>
+  </tr>
+  <tr>
+    <td><img src="./screenshots/7.png" width="300"></td>
+    <td><img src="./screenshots/8.png" width="300"></td>
+    <td><img src="./screenshots/9.png" width="300"></td>
+  </tr>
+  <tr>
+    <td><img src="./screenshots/10.png" width="300"></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
+---
+
 ## Features
 
 - **Dashboard Overview** - View weekly income, expenses, remaining balance, and monthly averages.
@@ -31,7 +56,7 @@ A Windows desktop personal finance tracker built with Qt Widgets, JSON persisten
    - Qt 6.x for Desktop Development
    - MSVC 2022 64‑bit kit (required)
 
-After installation, verify that this folder exists:  
+After installation, verify that this folder exists:
 `C:\Qt\<version>\msvc2022_64\lib\cmake\Qt6`
 
 ---
