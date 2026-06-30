@@ -73,11 +73,11 @@ double weeksFromFrequency(IncomeFrequency frequency, double amount) {
     return amount;
 }
 
-double weeklyExpenseContribution(BillFrequency frequency, BillPaymentMethod method, double amount) {
+double weeklyExpenseContribution(BillFrequency frequency, double amount, bool spreadWeekly) {
     switch (frequency) {
     case BillFrequency::Weekly: return amount;
     case BillFrequency::BiWeekly: return amount / 2.0;
-    case BillFrequency::Monthly: return method == BillPaymentMethod::Automatic ? amount / 4.0 : 0.0;
+    case BillFrequency::Monthly: return spreadWeekly ? amount / 4.0 : 0.0;
     }
     return 0.0;
 }

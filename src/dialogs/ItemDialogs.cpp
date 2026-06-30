@@ -100,7 +100,7 @@ void IncomeDialog::accept() {
 BillDialog::BillDialog(bool monthlyMode, QWidget* parent, const Bill* existing)
     : QDialog(parent), m_monthlyMode(monthlyMode) {
     setWindowTitle(existing ? "Edit Bill" : "Add Bill");
-    resize(480, 360);
+    resize(480, 400);
 
     m_nameEdit = new QLineEdit;
     m_amountSpin = makeMoneySpin();
@@ -109,11 +109,13 @@ BillDialog::BillDialog(bool monthlyMode, QWidget* parent, const Bill* existing)
     m_paymentDayEdit = new QLineEdit;
     m_paymentMethodCombo = new QComboBox;
     m_paymentMethodCombo->addItems({ "manual", "automatic" });
+    m_spreadWeeklyCheck = new QCheckBox("Include in weekly expenses (spread monthly amount across 4 weeks)");
     m_notesEdit = new QTextEdit;
 
     if (!m_monthlyMode) {
         m_paymentMethodCombo->setCurrentText("manual");
         m_paymentMethodCombo->setEnabled(false);
+        m_spreadWeeklyCheck->setVisible(false);
     }
 
     auto* form = new QFormLayout;
@@ -123,6 +125,7 @@ BillDialog::BillDialog(bool monthlyMode, QWidget* parent, const Bill* existing)
     form->addRow("Payment Day", m_paymentDayEdit);
     if (m_monthlyMode) {
         form->addRow("Payment Method", m_paymentMethodCombo);
+        form->addRow("", m_spreadWeeklyCheck);
     } else {
         form->addRow("Payment Method", new QLabel("manual"));
     }
@@ -142,7 +145,15 @@ BillDialog::BillDialog(bool monthlyMode, QWidget* parent, const Bill* existing)
         m_frequencyCombo->setCurrentText(billFrequencyToString(existing->frequency));
         m_paymentDayEdit->setText(existing->paymentDay);
         m_paymentMethodCombo->setCurrentText(paymentMethodToString(existing->paymentMethod));
+        if (m_monthlyMode) {
+            m_spreadWeeklyCheck->setChecked(existing->spreadWeekly);
+        }
         m_notesEdit->setPlainText(existing->notes);
+    } else {
+        if (m_monthlyMode) {
+            bool isAuto = (m_paymentMethodCombo->currentText() == "automatic");
+            m_spreadWeeklyCheck->setChecked(isAuto);
+        }
     }
 }
 
@@ -154,6 +165,11 @@ Bill BillDialog::resultData() const {
     bill.paymentDay = m_paymentDayEdit->text().trimmed();
     bill.paymentMethod = m_monthlyMode ? paymentMethodFromString(m_paymentMethodCombo->currentText()) : BillPaymentMethod::Manual;
     bill.notes = m_notesEdit->toPlainText().trimmed();
+    if (m_monthlyMode) {
+        bill.spreadWeekly = m_spreadWeeklyCheck->isChecked();
+    } else {
+        bill.spreadWeekly = false;
+    }
     return bill;
 }
 
@@ -255,6 +271,8 @@ void PaymentDialog::accept() {
     }
     QDialog::accept();
 }
+
+// ==================== PlanDialog ====================
 
 PlanDialog::PlanDialog(QWidget* parent, const PlanItem* existing)
     : QDialog(parent) {

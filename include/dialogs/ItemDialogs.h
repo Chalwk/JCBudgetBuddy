@@ -57,6 +57,7 @@ private:
     QComboBox* m_frequencyCombo{};
     QLineEdit* m_paymentDayEdit{};
     QComboBox* m_paymentMethodCombo{};
+    QCheckBox* m_spreadWeeklyCheck{};
     QTextEdit* m_notesEdit{};
 };
 

@@ -39,6 +39,6 @@ QString formatOptionalDate(const std::optional<QDate>& date);
 std::optional<QDate> parseOptionalDate(const QJsonObject& obj, const QString& key);
 
 double weeksFromFrequency(IncomeFrequency frequency, double amount);
-double weeklyExpenseContribution(BillFrequency frequency, BillPaymentMethod method, double amount);
+double weeklyExpenseContribution(BillFrequency frequency, double amount, bool spreadWeekly);
 
 QString formatTimeframe(double weeks);

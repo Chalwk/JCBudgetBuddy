@@ -11,6 +11,7 @@ struct Bill {
     QString paymentDay;
     BillPaymentMethod paymentMethod = BillPaymentMethod::Manual;
     QString notes;
+    bool spreadWeekly = false;
 
     double weeklyAmount() const;
     QJsonObject toJson() const;
