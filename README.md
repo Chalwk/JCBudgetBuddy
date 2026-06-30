@@ -113,7 +113,7 @@ The repository includes pre‑configured VS Code settings (in the `.vscode` fold
 
 ### IntelliSense & Build Troubleshooting
 
-If you see red squiggles under Qt includes (e.g., `#include <QWidget>`) even though the project compiles successfully, or if CMake fails to find Qt, follow these steps to align your environment with the actual build:
+If you see errors under Qt includes (e.g., `#include <QWidget>`) even though the project compiles successfully, or if CMake fails to find Qt, follow these steps to align your environment with the actual build:
 
 1. **Verify the paths** in `.vscode/settings.json` and `.vscode/launch.json` match your local Qt installation.
 2. **Select the correct MSVC kit**:  

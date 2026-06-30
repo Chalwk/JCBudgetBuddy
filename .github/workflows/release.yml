@@ -1,0 +1,48 @@
+name: Build and Package on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Qt 6.11.1 (MSVC 2022 64‑bit)
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.11.1'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2022_64'
+
+      - name: Install NSIS
+        run: choco install nsis -y
+
+      - name: Configure CMake
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build (Release)
+        run: cmake --build build --config Release
+
+      - name: Package with windeployqt
+        run: installer\package.bat build
+
+      - name: Build NSIS Installer
+        run: |
+          cd installer
+          makensis JCBudgetBuddy.nsi
+
+      - name: Upload installer to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: installer/JCBudgetBuddySetup.exe
+          asset_name: JCBudgetBuddySetup.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
