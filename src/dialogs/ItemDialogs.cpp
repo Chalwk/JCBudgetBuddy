@@ -429,6 +429,106 @@ void PaymentsDialog::accept() {
     QDialog::accept();
 }
 
+PlanPaymentsDialog::PlanPaymentsDialog(PlanItem* plan, QWidget* parent)
+    : QDialog(parent), m_plan(plan), m_workingCopy(plan ? *plan : PlanItem{}) {
+    setWindowTitle(QString("Payments for Plan: %1").arg(plan ? plan->name : ""));
+    resize(560, 400);
+
+    m_table = new QTableView;
+    m_model = new QStandardItemModel(this);
+    m_model->setHorizontalHeaderLabels({ "Date", "Amount" });
+    m_table->setModel(m_model);
+    m_table->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_table->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    m_table->horizontalHeader()->setStretchLastSection(true);
+
+    m_addButton = new QPushButton("Add");
+    m_editButton = new QPushButton("Edit");
+    m_deleteButton = new QPushButton("Delete");
+
+    connect(m_addButton, &QPushButton::clicked, this, &PlanPaymentsDialog::addPayment);
+    connect(m_editButton, &QPushButton::clicked, this, &PlanPaymentsDialog::editPayment);
+    connect(m_deleteButton, &QPushButton::clicked, this, &PlanPaymentsDialog::deletePayment);
+    connect(m_table, &QTableView::doubleClicked, this, &PlanPaymentsDialog::onDoubleClicked);
+
+    auto* buttonRow = new QHBoxLayout;
+    buttonRow->addWidget(m_addButton);
+    buttonRow->addWidget(m_editButton);
+    buttonRow->addWidget(m_deleteButton);
+    buttonRow->addStretch();
+
+    auto* closeButton = new QPushButton("Close");
+    connect(closeButton, &QPushButton::clicked, this, &PlanPaymentsDialog::accept);
+
+    auto* closeRow = new QHBoxLayout;
+    closeRow->addStretch();
+    closeRow->addWidget(closeButton);
+
+    auto* layout = new QVBoxLayout(this);
+    layout->addWidget(m_table);
+    layout->addLayout(buttonRow);
+    layout->addLayout(closeRow);
+
+    refresh();
+}
+
+void PlanPaymentsDialog::refresh() {
+    m_model->removeRows(0, m_model->rowCount());
+    for (const auto& payment : m_workingCopy.payments) {
+        QList<QStandardItem*> row;
+        auto* dateItem = new QStandardItem(formatDate(payment.date));
+        auto* amountItem = new QStandardItem(QString("$%1").arg(payment.amount, 0, 'f', 2));
+        row << dateItem << amountItem;
+        m_model->appendRow(row);
+    }
+    m_table->resizeColumnsToContents();
+}
+
+void PlanPaymentsDialog::addPayment() {
+    PaymentDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        m_workingCopy.payments.append(dialog.resultData());
+        refresh();
+    }
+}
+
+void PlanPaymentsDialog::editPayment() {
+    const int row = m_table->currentIndex().row();
+    if (row < 0 || row >= m_workingCopy.payments.size()) return;
+    PaymentDialog dialog(this, &m_workingCopy.payments[row]);
+    if (dialog.exec() == QDialog::Accepted) {
+        m_workingCopy.payments[row] = dialog.resultData();
+        refresh();
+    }
+}
+
+void PlanPaymentsDialog::deletePayment() {
+    const int row = m_table->currentIndex().row();
+    if (row < 0 || row >= m_workingCopy.payments.size()) return;
+    if (QMessageBox::question(this, "Delete Payment", "Delete the selected payment?") == QMessageBox::Yes) {
+        m_workingCopy.payments.removeAt(row);
+        refresh();
+    }
+}
+
+void PlanPaymentsDialog::onDoubleClicked(const QModelIndex&) {
+    editPayment();
+}
+
+void PlanPaymentsDialog::accept() {
+    if (m_plan) {
+        *m_plan = m_workingCopy;
+        QString error;
+        if (!DataManager::instance().save(&error)) {
+            QMessageBox::critical(this, "Save Error", error);
+            return;
+        }
+        emit DataManager::instance().dataChanged();
+    }
+    QDialog::accept();
+}
+
 PlanAnalysisDialog::PlanAnalysisDialog(QWidget* parent)
     : QDialog(parent) {
     setWindowTitle("Plan Analysis");

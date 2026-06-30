@@ -30,6 +30,7 @@ set(SOURCES
     src/widgets/MonthlyBillsWidget.cpp
     src/widgets/InvoicesWidget.cpp
     src/widgets/PlanWidget.cpp
+    src/widgets/SavingsGoalsWidget.cpp
     src/dialogs/ItemDialogs.cpp
     resources/resources.qrc
 )
@@ -52,6 +53,7 @@ set(HEADERS
     include/widgets/MonthlyBillsWidget.h
     include/widgets/InvoicesWidget.h
     include/widgets/PlanWidget.h
+    include/widgets/SavingsGoalsWidget.h
     include/dialogs/ItemDialogs.h
 )
 

@@ -9,6 +9,7 @@
 #include "widgets/MonthlyBillsWidget.h"
 #include "widgets/InvoicesWidget.h"
 #include "widgets/PlanWidget.h"
+#include "widgets/SavingsGoalsWidget.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -30,4 +31,5 @@ private:
     MonthlyBillsWidget* m_monthlyBillsWidget{};
     InvoicesWidget* m_invoicesWidget{};
     PlanWidget* m_planWidget{};
+    SavingsGoalsWidget* m_savingsGoalsWidget{};
 };

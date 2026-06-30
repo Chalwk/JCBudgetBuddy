@@ -132,6 +132,29 @@ private:
     QPushButton* m_deleteButton{};
 };
 
+class PlanPaymentsDialog : public QDialog {
+    Q_OBJECT
+public:
+    explicit PlanPaymentsDialog(PlanItem* plan, QWidget* parent = nullptr);
+
+private slots:
+    void addPayment();
+    void editPayment();
+    void deletePayment();
+    void onDoubleClicked(const QModelIndex& index);
+    void refresh();
+    void accept() override;
+
+private:
+    PlanItem* m_plan{};
+    PlanItem m_workingCopy;
+    QTableView* m_table{};
+    QStandardItemModel* m_model{};
+    QPushButton* m_addButton{};
+    QPushButton* m_editButton{};
+    QPushButton* m_deleteButton{};
+};
+
 class PlanAnalysisDialog : public QDialog {
     Q_OBJECT
 public:

@@ -36,12 +36,14 @@ MainWindow::MainWindow(QWidget* parent)
     m_monthlyBillsWidget = new MonthlyBillsWidget;
     m_invoicesWidget = new InvoicesWidget;
     m_planWidget = new PlanWidget;
+    m_savingsGoalsWidget = new SavingsGoalsWidget;
 
     m_tabs->addTab(m_incomeWidget, "Income");
     m_tabs->addTab(m_weeklyBillsWidget, "Weekly Bills");
     m_tabs->addTab(m_monthlyBillsWidget, "Monthly Bills");
     m_tabs->addTab(m_invoicesWidget, "Invoices");
     m_tabs->addTab(m_planWidget, "Plans");
+    m_tabs->addTab(m_savingsGoalsWidget, "Savings Goals");
 
     root->addWidget(headerFrame);
     root->addWidget(m_dashboard);
@@ -67,6 +69,7 @@ void MainWindow::refreshAll() {
     m_monthlyBillsWidget->refresh();
     m_invoicesWidget->refresh();
     m_planWidget->refresh();
+    m_savingsGoalsWidget->refresh();
     updateDashboard();
 }
 
