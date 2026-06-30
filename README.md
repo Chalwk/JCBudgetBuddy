@@ -63,28 +63,18 @@ cmake --version
    cmake --build build --config Release
    ```
 
-4. **Package** the application (copy all required Qt runtime libraries and VC++ runtime files so it can run standalone):
-   ```bash
-   installer\package.bat build
-   ```
-   This will create a `build\package` folder containing the executable and all necessary DLLs - ready for distribution or installer creation.
-
-   > **Note:** If `windeployqt` is not in your PATH, the script will warn you. In that case, manually copy the required Qt DLLs (you can run `windeployqt build\Release\JCBudgetBuddy.exe` directly) and also copy the Visual C++ runtime DLLs (e.g., `msvcp140.dll`, `vcruntime140.dll`) from your compiler's `bin` folder.
-
 ---
 
 ## Creating an installer with NSIS
 
-1. **Build and package** the application as described above (so the `build\package` folder is populated).
-
-2. Open the NSIS script in the NSIS compiler (or use the command line):
+1. Open the NSIS script in the NSIS compiler (or use the command line):
    ```bash
    cd installer
    makensis JCBudgetBuddy.nsi
    ```
    This will generate `JCBudgetBuddySetup.exe` in the `installer` folder.
 
-3. Run the installer - it will:
+2. Run the installer. It will:
    - Install the application to `C:\Program Files\JCBudgetBuddy`.
    - Create a Desktop shortcut and a Start Menu folder with both application and uninstall shortcuts.
    - Register the application in Windows **Add/Remove Programs** for easy uninstallation.
