@@ -48,26 +48,33 @@ cmake --version
 
 ## Build & Package from VS Code
 
+You have two ways to build and package the application:
+
+**Option A - Automated (recommended)**  
+Run the batch script, which performs all tasks: cleaning, configuring, building, packaging, and generating the NSIS installer.
 ```bash
 build_package.bat
 ```
 
-1. **Clean previous build** (recommended to avoid cache or Qt mismatch issues):
+**Option B - Manual execution**
+If you prefer to run each step individually, use the commands below.
+
+1. **Clean** (remove previous build artifacts):
    ```bash
    rmdir /s /q build
    ```
 
-2. **Configure** the project (generate build files and locate Qt):
+2. **Configure** (generate build files and locate Qt):
    ```bash
    cmake -S . -B build -DQt6_DIR="C:/Qt/6.11.1/msvc2022_64/lib/cmake/Qt6"
    ```
 
-3. **Build** the project (compile the application):
+3. **Build** (compile the application in Release mode):
    ```bash
    cmake --build build --config Release
    ```
 
-4. **Package** the application
+4. **Package** (copy dependencies and prepare the distributable folder):
    ```bash
    installer\package.bat build
    ```
