@@ -39,7 +39,7 @@ jobs:
       - name: Build NSIS Installer
         run: |
           cd installer
-          makensis JCBudgetBuddy.nsi
+          "C:\Program Files (x86)\NSIS\makensis.exe" JCBudgetBuddy.nsi
 
       - name: Upload installer to release
         uses: actions/upload-release-asset@v1
