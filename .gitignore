@@ -1,14 +1,13 @@
-# Build artifacts
 build/
 *.exe
 *.pdb
 *.ilk
 *.log
 
-# User-specific files
 *.user
 *.suo
 
-# CMake cache (just in case)
 CMakeCache.txt
 CMakeFiles/
+
+.idea/
