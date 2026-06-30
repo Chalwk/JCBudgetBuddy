@@ -4,7 +4,7 @@
 !define PRODUCT_VERSION "1.0.0"
 !define PRODUCT_PUBLISHER "Chalwk"
 
-!insertmacro MUI_LANGUAGE "English"
+SetCompressor /SOLID lzma
 
 Name "${PRODUCT_NAME}"
 OutFile "JCBudgetBuddySetup.exe"
@@ -12,10 +12,12 @@ InstallDir "$PROGRAMFILES64\${PRODUCT_NAME}"
 RequestExecutionLevel admin
 
 !define MUI_ABORTWARNING
+
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
+!insertmacro MUI_LANGUAGE "English"
 
 Section "Install"
     SetOutPath "$INSTDIR"
@@ -24,7 +26,6 @@ Section "Install"
     WriteUninstaller "$INSTDIR\Uninstall.exe"
 
     CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_NAME}.exe"
-
     CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
     CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_NAME}.exe"
     CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk" "$INSTDIR\Uninstall.exe"

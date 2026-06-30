@@ -23,7 +23,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo [4/5] Packaging (custom package.bat)...
+echo [4/5] Packaging...
 installer\package.bat build
 if errorlevel 1 (
     echo ERROR: Packaging failed.
