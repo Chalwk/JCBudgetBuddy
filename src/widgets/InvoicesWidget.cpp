@@ -1,14 +1,19 @@
 #include "widgets/InvoicesWidget.h"
-
 #include <QMessageBox>
 #include <QColor>
 #include <QBrush>
 #include <QStandardItem>
+#include <QHeaderView>
 
 InvoicesWidget::InvoicesWidget(QWidget* parent)
     : BaseTableWidget(parent) {
     setupTable({ "Invoice Number", "Total", "Balance", "Payments" });
     setupButtons("Add Invoice", "Edit", "Delete");
+
+    auto* header = table()->horizontalHeader();
+    header->setStretchLastSection(false);
+    header->setSectionResizeMode(3, QHeaderView::Fixed);
+    header->resizeSection(3, 150);
 
     auto* delegate = new ButtonDelegate("View Payments", this);
     table()->setItemDelegateForColumn(3, delegate);
@@ -56,7 +61,11 @@ void InvoicesWidget::refresh() {
         row << numberItem << totalItem << balanceItem << buttonItem;
         model()->appendRow(row);
     }
+
     table()->resizeColumnsToContents();
+    auto* header = table()->horizontalHeader();
+    header->setSectionResizeMode(3, QHeaderView::Fixed);
+    header->resizeSection(3, 150);
 }
 
 void InvoicesWidget::addInvoice() {

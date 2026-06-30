@@ -102,11 +102,18 @@ QPushButton:pressed {
     background: #1e40af;
 }
 
-QLineEdit, QComboBox, QDateEdit, QDoubleSpinBox, QTextEdit {
+QLineEdit, QComboBox, QDateEdit, QTextEdit {
     background: white;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
     padding: 6px;
+}
+
+QDoubleSpinBox {
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    min-height: 28px;
 }
 
 QDialog {

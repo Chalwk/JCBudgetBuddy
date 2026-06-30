@@ -14,5 +14,9 @@
   "cmake.configureArgs": [
     "-DQt6_DIR=C:/Qt/6.11.1/msvc2022_64/lib/cmake/Qt6"
   ],
-  "cmake.buildBeforeRun": true
+  "cmake.buildBeforeRun": true,
+
+  "files.associations": {
+    "*.qss": "css"
+  }
 }

@@ -10,7 +10,7 @@ ButtonDelegate::ButtonDelegate(const QString& text, QObject* parent)
 
 void ButtonDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex&) const {
     QStyleOptionButton button;
-    button.rect = option.rect.adjusted(6, 4, -6, -4);
+    button.rect = option.rect.adjusted(10, 4, -10, -4);
     button.text = m_text;
     button.state = QStyle::State_Enabled;
     if (option.state & QStyle::State_MouseOver) {
