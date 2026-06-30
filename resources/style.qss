@@ -74,9 +74,6 @@ QTabBar::tab:selected {
 QTableView {
     background: white;
     border: 1px solid #dbe4f0;
-    gridline-color: #e5edf7;
-    selection-background-color: #dbeafe;
-    selection-color: #111827;
 }
 
 QHeaderView::section {
