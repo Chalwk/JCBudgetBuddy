@@ -71,11 +71,11 @@ void MainWindow::refreshAll() {
 }
 
 void MainWindow::updateDashboard() {
-    const auto& data = DataManager::instance().data();
+    const auto& userData = DataManager::instance().data();
 
     double weeklyIncome = 0.0;
     int activeIncomeStreams = 0;
-    for (const auto& income : data.incomes) {
+    for (const auto& income : userData.incomes) {
         weeklyIncome += income.weeklyAmount();
         if (income.isCurrentlyActive()) {
             ++activeIncomeStreams;
@@ -83,10 +83,10 @@ void MainWindow::updateDashboard() {
     }
 
     double weeklyExpenses = 0.0;
-    for (const auto& bill : data.weeklyBills) {
+    for (const auto& bill : userData.weeklyBills) {
         weeklyExpenses += bill.weeklyAmount();
     }
-    for (const auto& bill : data.monthlyBills) {
+    for (const auto& bill : userData.monthlyBills) {
         weeklyExpenses += bill.weeklyAmount();
     }
 

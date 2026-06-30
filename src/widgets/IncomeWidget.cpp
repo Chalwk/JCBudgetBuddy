@@ -32,7 +32,11 @@ void IncomeWidget::refresh() {
     const auto& list = DataManager::instance().data().incomes;
     for (const auto& income : list) {
         QList<QStandardItem*> row;
-        row << new QStandardItem(income.name);
+        auto* nameItem = new QStandardItem(income.name);
+        QFont font = nameItem->font();
+        font.setBold(true);
+        nameItem->setFont(font);
+        row << nameItem;
         row << new QStandardItem(QString("$%1").arg(income.amount, 0, 'f', 2));
         row << new QStandardItem(incomeFrequencyToString(income.frequency));
         row << new QStandardItem(formatDate(income.startDate));

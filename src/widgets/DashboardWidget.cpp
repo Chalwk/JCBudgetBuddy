@@ -59,6 +59,25 @@ void DashboardWidget::setStats(double weeklyIncome, double weeklyExpenses, doubl
     m_remainingValue->setText(QString("$%1").arg(remaining, 0, 'f', 2));
     m_monthlyAverageValue->setText(QString("$%1").arg(monthlyAverage, 0, 'f', 2));
 
-    const QString balanceColor = remaining >= 0.0 ? "#107c10" : "#c50f1f";
-    m_remainingValue->setStyleSheet(QString("font-size: 24px; font-weight: bold; color: %1;").arg(balanceColor));
+    m_weeklyIncomeValue->setStyleSheet("font-size: 24px; font-weight: bold; color: #107c10;");
+
+    QString color;
+    if (weeklyIncome > 0.0) {
+        double percentage = remaining / weeklyIncome;
+        if (percentage >= 0.80) {
+            color = "#107c10";
+        } else if (percentage >= 0.50) {
+            color = "#2e7d32";
+        } else if (percentage >= 0.25) {
+            color = "#ed6c02";
+        } else if (percentage >= 0.0) {
+            color = "#f57c00";
+        } else {
+            color = "#c50f1f";
+        }
+    } else {
+        color = (remaining >= 0.0) ? "#107c10" : "#c50f1f";
+    }
+
+    m_remainingValue->setStyleSheet(QString("font-size: 24px; font-weight: bold; color: %1;").arg(color));
 }

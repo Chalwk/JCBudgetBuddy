@@ -45,10 +45,12 @@ void InvoicesWidget::refresh() {
         const double balance = invoice.balance();
         QList<QStandardItem*> row;
         auto* numberItem = new QStandardItem(invoice.number);
-        auto* totalItem = new QStandardItem(QString("$%1").arg(invoice.total, 0, 'f', 2));
+        QFont font = numberItem->font();
+        font.setBold(true);
+        numberItem->setFont(font);
+        row << numberItem;
+        row << new QStandardItem(QString("$%1").arg(invoice.total, 0, 'f', 2));
         auto* balanceItem = new QStandardItem(QString("$%1").arg(balance, 0, 'f', 2));
-        auto* buttonItem = new QStandardItem("View Payments");
-
         if (balance <= 0.0) {
             balanceItem->setForeground(QBrush(QColor("#107c10")));
         } else {
@@ -57,11 +59,11 @@ void InvoicesWidget::refresh() {
         if (balance < 0.0) {
             balanceItem->setForeground(QBrush(QColor("#c50f1f")));
         }
-
-        row << numberItem << totalItem << balanceItem << buttonItem;
+        row << balanceItem;
+        auto* buttonItem = new QStandardItem("View Payments");
+        row << buttonItem;
         model()->appendRow(row);
     }
-
     table()->resizeColumnsToContents();
     auto* header = table()->horizontalHeader();
     header->setSectionResizeMode(3, QHeaderView::Fixed);

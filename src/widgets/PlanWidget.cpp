@@ -37,7 +37,11 @@ void PlanWidget::refresh() {
     const auto& list = DataManager::instance().data().plans;
     for (const auto& plan : list) {
         QList<QStandardItem*> row;
-        row << new QStandardItem(plan.name);
+        auto* nameItem = new QStandardItem(plan.name);
+        QFont font = nameItem->font();
+        font.setBold(true);
+        nameItem->setFont(font);
+        row << nameItem;
         row << new QStandardItem(QString("$%1").arg(plan.totalCost, 0, 'f', 2));
         row << new QStandardItem(QString("$%1").arg(plan.deposit, 0, 'f', 2));
         row << new QStandardItem(QString("$%1").arg(plan.weeklyPayment, 0, 'f', 2));
