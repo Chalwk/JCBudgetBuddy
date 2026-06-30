@@ -15,10 +15,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Qt 6.11.1 (MSVC 2022 64-bit)
+      - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.11.1'
+          version: '6.8.2'
           host: 'windows'
           target: 'desktop'
           arch: 'win64_msvc2022_64'
