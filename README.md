@@ -2,6 +2,13 @@
 
 A Windows desktop personal finance tracker built with Qt Widgets, JSON persistence, and CMake for managing weekly and monthly expenses, invoices, and payments.
 
+[![Version](https://img.shields.io/github/v/release/Chalwk/JCBudgetBuddy?label=Version&display_name=tag)](https://github.com/Chalwk/JCBudgetBuddy/releases/latest)
+[![License: GPL v3](https://img.shields.io/github/license/Chalwk/JCBudgetBuddy)](https://github.com/Chalwk/JCBudgetBuddy/blob/main/LICENSE)
+![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)
+![Qt 6](https://img.shields.io/badge/Qt-6-green.svg)
+![Windows](https://img.shields.io/badge/Platform-Windows-0078D6)
+![CMake](https://img.shields.io/badge/CMake-3.16%2B-064F8C)
+
 ---
 
 <table>
