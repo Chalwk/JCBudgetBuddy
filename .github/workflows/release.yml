@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Jericho Crosby (Chalwk).
+# Licensed under the GPL License.
+
 name: Build and Package on Release
 
 on:
@@ -12,12 +15,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Qt
-        uses: crazy-max/ghaction-setup-qt@v3
+      - name: Install Qt 6.11.1 (MSVC 2022 64‑bit)
+        uses: jurplel/install-qt-action@v3
         with:
-          version: '6.7.2'
+          version: '6.11.1'
+          host: 'windows'
+          target: 'desktop'
           arch: 'win64_msvc2022_64'
-          install-deps: true
 
       - name: Install NSIS
         run: choco install nsis -y
