@@ -24,7 +24,7 @@ if errorlevel 1 (
 )
 
 echo [4/5] Packaging...
-installer\package.bat build
+call installer\package.bat build
 if errorlevel 1 (
     echo ERROR: Packaging failed.
     exit /b 1
@@ -32,12 +32,14 @@ if errorlevel 1 (
 
 echo [5/5] Generating NSIS installer...
 pushd installer || exit /b 1
+
 makensis JCBudgetBuddy.nsi
 if errorlevel 1 (
     popd
     echo ERROR: NSIS failed.
     exit /b 1
 )
+
 popd
 
 echo All steps completed successfully.

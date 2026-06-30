@@ -20,7 +20,7 @@ signals:
 
 protected:
     void dropEvent(QDropEvent* event) override {
-        QModelIndex droppedIndex = indexAt(event->pos());
+        QModelIndex droppedIndex = indexAt(event->position().toPoint());
         if (!droppedIndex.isValid()) {
             event->ignore();
             return;
