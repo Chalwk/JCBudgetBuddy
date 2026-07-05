@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(JCBudgetBuddy VERSION 1.0.0 LANGUAGES CXX)
+project(JCBudgetBuddy VERSION 1.0.1 LANGUAGES CXX)
 
 set(PRODUCT_NAME  "${PROJECT_NAME}")
 set(PRODUCT_PUBLISHER "Chalwk")

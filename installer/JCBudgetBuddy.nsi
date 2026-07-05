@@ -4,7 +4,7 @@
 !include "MUI2.nsh"
 
 !define PRODUCT_NAME "JCBudgetBuddy"
-!define PRODUCT_VERSION "1.0.0"
+!define PRODUCT_VERSION "1.0.1"
 !define PRODUCT_PUBLISHER "Chalwk"
 
 SetCompressor /SOLID lzma
