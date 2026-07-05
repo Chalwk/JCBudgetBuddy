@@ -37,6 +37,8 @@ add_executable(${PROJECT_NAME} WIN32
     src/models/PlanItem.h
     src/models/UserData.cpp
     src/models/UserData.h
+    src/models/Expense.cpp
+    src/models/Expense.h
     src/utils/FinanceUtils.cpp
     src/utils/FinanceUtils.h
     src/widgets/BaseTableWidget.cpp
@@ -55,6 +57,8 @@ add_executable(${PROJECT_NAME} WIN32
     src/widgets/SavingsGoalsWidget.h
     src/widgets/WeeklyBillsWidget.cpp
     src/widgets/WeeklyBillsWidget.h
+    src/widgets/ExpensesWidget.cpp
+    src/widgets/ExpensesWidget.h
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE src ${CMAKE_CURRENT_BINARY_DIR}/src)

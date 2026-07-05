@@ -9,14 +9,17 @@
 #include "models/Bill.h"
 #include "models/Invoice.h"
 #include "models/PlanItem.h"
+#include "models/Expense.h"
 
-struct UserData {
+struct UserData
+{
     QList<IncomeStream> incomes;
     QList<Bill> weeklyBills;
     QList<Bill> monthlyBills;
     QList<Invoice> invoices;
     QList<PlanItem> plans;
+    QList<Expense> expenses;
 
     QJsonObject toJson() const;
-    static UserData fromJson(const QJsonObject& obj);
+    static UserData fromJson(const QJsonObject &obj);
 };

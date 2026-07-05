@@ -13,11 +13,13 @@
 #include "widgets/InvoicesWidget.h"
 #include "widgets/PlanWidget.h"
 #include "widgets/SavingsGoalsWidget.h"
+#include "widgets/ExpensesWidget.h"
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget* parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
 
 private slots:
     void refreshAll();
@@ -26,13 +28,14 @@ private slots:
 private:
     void updateDashboard();
 
-    QWidget* m_central{};
-    DashboardWidget* m_dashboard{};
-    QTabWidget* m_tabs{};
-    IncomeWidget* m_incomeWidget{};
-    WeeklyBillsWidget* m_weeklyBillsWidget{};
-    MonthlyBillsWidget* m_monthlyBillsWidget{};
-    InvoicesWidget* m_invoicesWidget{};
-    PlanWidget* m_planWidget{};
-    SavingsGoalsWidget* m_savingsGoalsWidget{};
+    QWidget *m_central{};
+    DashboardWidget *m_dashboard{};
+    QTabWidget *m_tabs{};
+    IncomeWidget *m_incomeWidget{};
+    WeeklyBillsWidget *m_weeklyBillsWidget{};
+    MonthlyBillsWidget *m_monthlyBillsWidget{};
+    InvoicesWidget *m_invoicesWidget{};
+    PlanWidget *m_planWidget{};
+    SavingsGoalsWidget *m_savingsGoalsWidget{};
+    ExpensesWidget *m_expensesWidget{};
 };
