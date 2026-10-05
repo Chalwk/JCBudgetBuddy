@@ -1,0 +1,105 @@
+name: Bug Report
+description: Report a bug, crash, or unexpected behaviour in JCBudgetBuddy.
+title: "[BUG] <title>"
+labels: [ "bug", "needs triage" ]
+assignees: Chalwk
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Is this a security issue?**
+        > If this bug could expose personal financial data, corrupt the data
+        > file, or let an attacker do something they shouldn't, **do not open a
+        > public issue**. Use the [Report a vulnerability](https://github.com/Chalwk/JCBudgetBuddy/security/advisories/new)
+        > link on the new issue page instead.
+        >
+        > For all other bugs, continue below.
+  - type: markdown
+    attributes:
+      value: |
+        **Describe the bug**
+        > Provide a clear and concise description in the following sections.
+        > Use headers (`#`) or lists (`-`) to organize your thoughts.
+  - type: input
+    id: version
+    attributes:
+      label: Application Version
+      description: Check the About dialog or the installer filename for the version number.
+      placeholder: "e.g., 1.2.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: build-type
+    attributes:
+      label: Build Type
+      description: How did you install JCBudgetBuddy?
+      options:
+        - Installer (JCBudgetBuddySetup.exe)
+        - Built from source
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: List the exact steps that trigger the problem. Redact any personal financial data.
+      placeholder: |
+        1. Open the app
+        2. Add a weekly bill
+        3. ...
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: Describe what you expected to happen.
+      placeholder: "Explain the expected behavior"
+    validations:
+      required: true
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: Describe what actually happened, including any error messages or crash output.
+      placeholder: "Paste the full error output here"
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: windows-version
+    attributes:
+      label: Windows Version
+      description: Which version of Windows are you running?
+      placeholder: "e.g., Windows 11 23H2, Windows 10 22H2"
+    validations:
+      required: true
+  - type: input
+    id: qt-version
+    attributes:
+      label: Qt Version
+      description: If you built from source, which Qt version did you use?
+      placeholder: "e.g., Qt 6.7.2"
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Write any other context or information about the bug here.
+      placeholder: "Further context or information here"
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: |
+        **Screenshots and Logs**
+        > Include any relevant screenshots or log files to help illustrate the bug.
+        >
+        > Please make sure you have redacted any personal financial data before posting.
+        >
+        >
+        > Thank you
+        >
+        > **I appreciate your effort in reporting bugs in JCBudgetBuddy. Your input is invaluable!**
